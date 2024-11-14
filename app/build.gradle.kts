@@ -1,5 +1,6 @@
 plugins {
   id("com.android.library")
+  id("kotlin-parcelize")
   alias(libs.plugins.jetbrains.kotlin.android)
 }
 
@@ -12,6 +13,10 @@ android {
     targetSdk = 34
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+  }
+
+  buildFeatures {
+    compose = true
   }
 
   buildTypes {
@@ -37,4 +42,20 @@ dependencies {
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)
   androidTestImplementation(libs.androidx.espresso.core)
+
+  // Compose core dependencies
+  implementation(libs.ui)
+  implementation(libs.material3)
+  implementation(libs.ui.tooling.preview)
+  implementation(libs.androidx.runtime.livedata)
+
+  // Lifecycle dependency for view models in Compose
+  implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+  implementation(libs.coil.compose)
+  implementation(libs.androidx.activity.compose)
+
+  // Optional: For testing Compose UI
+  androidTestImplementation(libs.ui.test.junit4)
+  debugImplementation(libs.ui.tooling)
 }
