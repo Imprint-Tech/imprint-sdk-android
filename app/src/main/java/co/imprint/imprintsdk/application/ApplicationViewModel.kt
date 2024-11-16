@@ -18,13 +18,13 @@ class ApplicationViewModel(private val configuration: ImprintConfiguration) : Vi
 
   private var completionState: ImprintConfiguration.CompletionState =
     ImprintConfiguration.CompletionState.ABANDONED
-  private var completionMetadata: CompletionMetadata? = null
+  private var completionMetadata: Map<String, String>? = null
 
   fun updateLogoUrl(url: String) {
     _logoUrl.value = url
   }
 
-  fun updateCompletionState(state: ImprintConfiguration.CompletionState, metadata: CompletionMetadata?) {
+  fun updateCompletionState(state: ImprintConfiguration.CompletionState, metadata: Map<String, String>?) {
     completionState = state
     completionMetadata = metadata
   }

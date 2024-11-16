@@ -13,7 +13,7 @@ data class ImprintConfiguration(
   var externalReferenceId: String? = null,
   var applicationId: String? = null,
   var additionalData: Map<String, String>? = null,
-  var onCompletion: ((CompletionState, CompletionMetadata?) -> Unit)? = null
+  var onCompletion: ((CompletionState, Map<String, String>?) -> Unit)? = null
 ) : Parcelable {
 
   /**
@@ -30,8 +30,3 @@ data class ImprintConfiguration(
     OFFER_ACCEPTED, REJECTED, ABANDONED
   }
 }
-
-/**
- * Metadata dictionary passed to the completion handler, containing flexible key-value pairs.
- */
-typealias CompletionMetadata = Map<String, Any>

@@ -1,9 +1,7 @@
-package co.imprint.imprint.application
+package co.imprint.imprintsdk.application
 
 import android.content.Context
 import android.content.Intent
-import co.imprint.imprintsdk.application.ApplicationActivity
-import co.imprint.imprintsdk.application.ImprintConfiguration
 
 /**
  * Main class for managing the Imprint application process.
