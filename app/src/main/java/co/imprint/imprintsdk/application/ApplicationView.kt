@@ -6,11 +6,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
 
 @Composable
@@ -18,7 +23,9 @@ fun ApplicationView(viewModel: ApplicationViewModel) {
   val context = LocalContext.current
   val logoUrl by viewModel.logoUrl.collectAsState()
 
-  Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
+  Column(modifier = Modifier
+    .fillMaxSize()
+    .background(Color.White)) {
     Spacer(modifier = Modifier.weight(1f))
 
     Row(
@@ -26,23 +33,28 @@ fun ApplicationView(viewModel: ApplicationViewModel) {
         .fillMaxWidth()
         .height(56.dp)
         .padding(horizontal = 16.dp),
-      horizontalArrangement = Arrangement.SpaceBetween
+      horizontalArrangement = Arrangement.SpaceBetween,
+      verticalAlignment = Alignment.CenterVertically,
     ) {
-      logoUrl?.let { url ->
-        AsyncImage(
-          model = ImageRequest.Builder(context).data(url).build(),
+        SubcomposeAsyncImage(
+          model = ImageRequest.Builder(context).data(logoUrl).build(),
           contentDescription = null,
           modifier = Modifier
             .size(48.dp)
-            .padding(16.dp)
-        )
-      }
+            .padding(16.dp),
+        ) {
+          when (painter.state) {
+            is AsyncImagePainter.State.Success ->
+              SubcomposeAsyncImageContent(contentScale = ContentScale.Fit)
+            else -> Box(modifier = Modifier.width(56.dp).fillMaxHeight())
+          }
+        }
 
       IconButton(
         onClick = {
           viewModel.onDismiss()
         },
-        modifier = Modifier.size(48.dp)
+        modifier = Modifier.size(24.dp),
       ) {
         Icon(
           imageVector = Icons.Default.Close,
