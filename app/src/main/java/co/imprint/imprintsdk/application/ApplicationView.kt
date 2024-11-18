@@ -1,5 +1,6 @@
 package co.imprint.imprintsdk.application
 
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -21,6 +22,7 @@ import coil.request.ImageRequest
 @Composable
 fun ApplicationView(viewModel: ApplicationViewModel) {
   val context = LocalContext.current
+  val activity = context as? Activity
   val logoUrl by viewModel.logoUrl.collectAsState()
 
   Column(modifier = Modifier
@@ -53,6 +55,7 @@ fun ApplicationView(viewModel: ApplicationViewModel) {
       IconButton(
         onClick = {
           viewModel.onDismiss()
+          activity?.finish()
         },
         modifier = Modifier.size(24.dp),
       ) {

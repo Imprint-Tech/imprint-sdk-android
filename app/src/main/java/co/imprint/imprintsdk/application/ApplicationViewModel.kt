@@ -30,6 +30,7 @@ class ApplicationViewModel(private val configuration: ImprintConfiguration) : Vi
   }
 
   fun onDismiss() {
-    configuration.onCompletion?.invoke(completionState, completionMetadata)
+    val onCompletion = ImprintCallbackHolder.onApplicationCompletion
+    onCompletion?.invoke(completionState, completionMetadata)
   }
 }

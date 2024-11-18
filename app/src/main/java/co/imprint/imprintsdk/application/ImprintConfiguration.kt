@@ -13,7 +13,6 @@ data class ImprintConfiguration(
   var externalReferenceId: String? = null,
   var applicationId: String? = null,
   var additionalData: Map<String, String>? = null,
-  var onCompletion: ((CompletionState, Map<String, String>?) -> Unit)? = null
 ) : Parcelable {
 
   /**
