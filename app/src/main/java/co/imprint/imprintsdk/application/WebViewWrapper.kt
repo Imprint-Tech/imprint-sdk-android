@@ -1,5 +1,6 @@
 package co.imprint.imprintsdk.application
 
+import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
@@ -34,41 +35,32 @@ fun WebViewWrapper(viewModel: ApplicationViewModel) {
           object {
             @JavascriptInterface
             fun onMessage(data: String) {
-              // Parse JSON data from JavaScript callback
-              val jsonObject = JSONObject(data)
-              val logoUrl = jsonObject.optString(Constants.LOGO_URL)
-              val eventName = jsonObject.optString(Constants.EVENT_NAME)
-              val metadata = jsonObject.optJSONObject(Constants.METADATA)
+              Log.d("Kaichang", "Received message: $data")
+              try {
+                // Parse the incoming JSON data
+                val jsonObject = JSONObject(data)
+                val eventName = jsonObject.optString(Constants.EVENT_NAME)
+                val metadataJson = jsonObject.optJSONObject(Constants.METADATA)
+                val logoURL = jsonObject.optString(Constants.LOGO_URL)
+                Log.d("Kaichang", "logoUrl: $logoURL")
+                viewModel.updateLogoUrl(url = logoURL)
 
-              // Update ViewModel or handle data
-              logoUrl?.let { viewModel.updateLogoUrl(it) }
-              eventName?.let { event ->
-                when (event) {
-                }
+                // Convert metadata JSON to Map<String, String>
+                val metadata = metadataJson?.let { jsonToMap(it) }
+                Log.d("Kaichang", "metaData: $metadata")
+
+                // Update ViewModel or handle the received data
+                val state = ImprintConfiguration.CompletionState.fromString(eventName)
+                viewModel.updateCompletionState(state, metadata)
+              } catch (e: Exception) {
+
               }
             }
           },
-          Constants.CALLBACK_HANDLER_NAME // Name of the JavaScript object
+          Constants.CALLBACK_HANDLER_NAME,
         )
 
-        webViewClient = object : WebViewClient() {
-          override fun shouldOverrideUrlLoading(
-            view: WebView,
-            request: WebResourceRequest
-          ): Boolean {
-            return false
-          }
-
-          override fun onPageFinished(view: WebView, url: String) {
-            // Inject JavaScript for callback handling
-            view.evaluateJavascript(
-              """
-                            window.${Constants.CALLBACK_HANDLER_NAME} = function(data) {
-                                Android.onMessage(JSON.stringify(data));
-                            }
-                            """.trimIndent(), null)
-          }
-        }
+        webViewClient = WebViewClient()
         loadUrl(viewModel.webUrl)
       }
     },
@@ -79,8 +71,19 @@ fun WebViewWrapper(viewModel: ApplicationViewModel) {
 }
 
 object Constants {
-  const val CALLBACK_HANDLER_NAME = "imprintWebCallback"
+  const val CALLBACK_HANDLER_NAME = "AndroidInterface"
   const val LOGO_URL = "logoUrl"
   const val EVENT_NAME = "eventName"
   const val METADATA = "metadata"
+}
+
+fun jsonToMap(jsonObject: JSONObject): Map<String, String> {
+  val map = mutableMapOf<String, String>()
+  val keys = jsonObject.keys()
+  while (keys.hasNext()) {
+    val key = keys.next()
+    val value = jsonObject.optString(key) // Safely get the string value
+    map[key] = value
+  }
+  return map
 }

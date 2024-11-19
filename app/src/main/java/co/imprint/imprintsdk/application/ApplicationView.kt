@@ -1,6 +1,7 @@
 package co.imprint.imprintsdk.application
 
 import android.app.Activity
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -13,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
@@ -24,12 +24,11 @@ fun ApplicationView(viewModel: ApplicationViewModel) {
   val context = LocalContext.current
   val activity = context as? Activity
   val logoUrl by viewModel.logoUrl.collectAsState()
+  Log.d("Kaichang", "ApplicationView: $logoUrl")
 
   Column(modifier = Modifier
     .fillMaxSize()
     .background(Color.White)) {
-    Spacer(modifier = Modifier.weight(1f))
-
     Row(
       modifier = Modifier
         .fillMaxWidth()
@@ -42,13 +41,15 @@ fun ApplicationView(viewModel: ApplicationViewModel) {
           model = ImageRequest.Builder(context).data(logoUrl).build(),
           contentDescription = null,
           modifier = Modifier
-            .size(48.dp)
+            .wrapContentWidth()
             .padding(16.dp),
         ) {
           when (painter.state) {
             is AsyncImagePainter.State.Success ->
               SubcomposeAsyncImageContent(contentScale = ContentScale.Fit)
-            else -> Box(modifier = Modifier.width(56.dp).fillMaxHeight())
+            else -> Box(modifier = Modifier
+              .width(56.dp)
+              .fillMaxHeight())
           }
         }
 

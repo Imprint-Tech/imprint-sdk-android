@@ -15,7 +15,7 @@ class MainViewModel : ViewModel() {
   // Function to start the application
   fun startApplication(context: Context) {
     val configuration = ImprintConfiguration(
-      sessionToken = "GENERATE_IN_POST_AUTH",
+      sessionToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcl9pZCI6IkJPT0tJTkciLCJleHAiOjE3MzEwNDkyMTksImlhdCI6MTczMTA0NTYxOX0.7va3IWy5ky1EWJ7-USOMfNdJS85tfO1gwe--OwJl4gI",
       environment = ImprintConfiguration.Environment.STAGING
     ).apply {
       externalReferenceId = "YOUR_CUSTOMER_ID"
