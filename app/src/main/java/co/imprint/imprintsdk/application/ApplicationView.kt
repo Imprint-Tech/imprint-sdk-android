@@ -19,58 +19,76 @@ import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
 
 @Composable
-fun ApplicationView(viewModel: ApplicationViewModel) {
+internal fun ApplicationView(viewModel: ApplicationViewModel) {
   val context = LocalContext.current
   val activity = context as? Activity
-  val logoUrl by viewModel.logoUrl.collectAsState()
+  val logoUrl = viewModel.logoUrl.collectAsState().value
 
-  Column(
+  Scaffold(
     modifier = Modifier
       .fillMaxSize()
-      .background(Color.White)
-  ) {
-    Row(
-      modifier = Modifier
-        .fillMaxWidth()
-        .height(56.dp)
-        .padding(horizontal = 16.dp),
-      horizontalArrangement = Arrangement.SpaceBetween,
-      verticalAlignment = Alignment.CenterVertically,
-    ) {
-      SubcomposeAsyncImage(
-        model = ImageRequest.Builder(context).data(logoUrl).build(),
-        contentDescription = null,
-        modifier = Modifier
-          .wrapContentWidth()
-          .padding(16.dp),
-      ) {
-        when (painter.state) {
-          is AsyncImagePainter.State.Success ->
-            SubcomposeAsyncImageContent(contentScale = ContentScale.Fit)
-
-          else -> Box(
-            modifier = Modifier
-              .width(56.dp)
-              .fillMaxHeight()
-          )
-        }
-      }
-
-      IconButton(
-        onClick = {
+      .background(Color.White),
+    containerColor = Color.White,
+    topBar = {
+      AppBar(
+        logoUrl = logoUrl,
+        onDismiss = {
           viewModel.onDismiss()
           activity?.finish()
         },
-        modifier = Modifier.size(24.dp),
-      ) {
-        Icon(
-          imageVector = Icons.Default.Close,
-          contentDescription = "Close",
-          tint = Color(0xFF232323)
-        )
-      }
+      )
     }
+  ) { innerPadding ->
+    WebViewWrapper(viewModel = viewModel, modifier = Modifier.padding(innerPadding))
+  }
+}
 
-    WebViewWrapper(viewModel)
+@Composable
+private fun AppBar(
+  logoUrl: String?,
+  onDismiss: () -> Unit,
+  modifier: Modifier = Modifier,
+) {
+  Row(
+    modifier = modifier
+      .fillMaxWidth()
+      .height(56.dp)
+      .padding(horizontal = 16.dp),
+    horizontalArrangement = Arrangement.SpaceBetween,
+    verticalAlignment = Alignment.CenterVertically,
+  ) {
+    LogoImage(logoUrl)
+    CloseButton(onDismiss)
+  }
+}
+
+@Composable
+private fun LogoImage(logoUrl: String?) {
+  val context = LocalContext.current
+  SubcomposeAsyncImage(
+    model = ImageRequest.Builder(context).data(logoUrl).build(),
+    contentDescription = null,
+    modifier = Modifier
+      .wrapContentWidth()
+      .padding(16.dp),
+  ) {
+    when (painter.state) {
+      is AsyncImagePainter.State.Success -> SubcomposeAsyncImageContent(contentScale = ContentScale.Fit)
+      else -> Box(modifier = Modifier.size(56.dp))
+    }
+  }
+}
+
+@Composable
+private fun CloseButton(onDismiss: () -> Unit) {
+  IconButton(
+    onClick = onDismiss,
+    modifier = Modifier.size(24.dp),
+  ) {
+    Icon(
+      imageVector = Icons.Default.Close,
+      contentDescription = "Close",
+      tint = Color.Black,
+    )
   }
 }

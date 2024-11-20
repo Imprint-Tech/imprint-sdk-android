@@ -36,7 +36,10 @@ class MainActivity : ComponentActivity() {
       val context = LocalContext.current
       val statusText by viewModel.statusText.collectAsState()
       ImprintSDKTheme {
-        Scaffold(modifier = Modifier.fillMaxSize(), containerColor = Color.White) { innerPadding ->
+        Scaffold(
+          modifier = Modifier.fillMaxSize(),
+          containerColor = Color.White,
+        ) { innerPadding ->
           Content(
             modifier = Modifier
               .padding(innerPadding)
@@ -61,9 +64,7 @@ private fun Content(
     horizontalAlignment = Alignment.CenterHorizontally,
   ) {
     Button(onClick = { onStartApplication() }) {
-      Text(
-        text = "Start application",
-      )
+      Text(text = "Start application")
     }
 
     Spacer(modifier = Modifier.height(48.dp))

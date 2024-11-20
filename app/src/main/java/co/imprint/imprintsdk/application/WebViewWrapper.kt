@@ -12,9 +12,12 @@ import androidx.compose.ui.viewinterop.AndroidView
 import org.json.JSONObject
 
 @Composable
-fun WebViewWrapper(viewModel: ApplicationViewModel) {
+internal fun WebViewWrapper(
+  viewModel: ApplicationViewModel,
+  modifier: Modifier = Modifier,
+) {
   AndroidView(
-    modifier = Modifier.fillMaxSize(),
+    modifier = modifier.fillMaxSize(),
     factory = { context ->
       WebView(context).apply {
         // Configure WebView settings
@@ -62,14 +65,14 @@ fun WebViewWrapper(viewModel: ApplicationViewModel) {
   )
 }
 
-object Constants {
+internal object Constants {
   const val CALLBACK_HANDLER_NAME = "AndroidInterface"
   const val LOGO_URL = "logoUrl"
   const val EVENT_NAME = "eventName"
   const val METADATA = "metadata"
 }
 
-fun jsonToMap(jsonObject: JSONObject): Map<String, String> {
+private fun jsonToMap(jsonObject: JSONObject): Map<String, String> {
   val map = mutableMapOf<String, String>()
   val keys = jsonObject.keys()
   while (keys.hasNext()) {

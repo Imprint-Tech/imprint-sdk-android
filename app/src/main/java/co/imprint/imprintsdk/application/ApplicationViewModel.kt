@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class ApplicationViewModel(private val configuration: ImprintConfiguration) : ViewModel() {
+internal class ApplicationViewModel(private val configuration: ImprintConfiguration) : ViewModel() {
   private val host = when (configuration.environment) {
     ImprintConfiguration.Environment.STAGING -> "https://apply.stg.imprintapi.co"
     ImprintConfiguration.Environment.SANDBOX -> "https://apply-sandbox.stg.imprintapi.co"
