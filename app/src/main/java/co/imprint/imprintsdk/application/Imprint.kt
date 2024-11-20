@@ -13,7 +13,11 @@ object Imprint {
    * @param context The context from which the application process will be presented.
    * @param configuration The configuration settings for the application process.
    */
-  fun startApplication(context: Context, configuration: ImprintConfiguration, onCompletion: (ImprintConfiguration.CompletionState, Map<String, String>?) -> Unit) {
+  fun startApplication(
+    context: Context,
+    configuration: ImprintConfiguration,
+    onCompletion: (ImprintConfiguration.CompletionState, Map<String, String>?) -> Unit,
+  ) {
     ImprintCallbackHolder.onApplicationCompletion = onCompletion
     val intent = Intent(context, ApplicationActivity::class.java).apply {
       putExtra("config", configuration)

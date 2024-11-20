@@ -23,23 +23,26 @@ class MainViewModel : ViewModel() {
       additionalData = mapOf("other" to "value")
     }
 
-    val onCompletion = { state: ImprintConfiguration.CompletionState, metadata: Map<String, String>? ->
-      val metadataInfo = metadata?.toString() ?: "No metadata"
-      val resultText = when (state) {
-        ImprintConfiguration.CompletionState.OFFER_ACCEPTED -> {
-          "Offer accepted\n$metadataInfo"
-        }
-        ImprintConfiguration.CompletionState.REJECTED -> {
-          "Application rejected\n$metadataInfo"
-        }
-        ImprintConfiguration.CompletionState.ABANDONED -> {
-          "Application abandoned\n$metadataInfo"
-        }
-      }
+    val onCompletion =
+      { state: ImprintConfiguration.CompletionState, metadata: Map<String, String>? ->
+        val metadataInfo = metadata?.toString() ?: "No metadata"
+        val resultText = when (state) {
+          ImprintConfiguration.CompletionState.OFFER_ACCEPTED -> {
+            "Offer accepted\n$metadataInfo"
+          }
 
-      // Update the status text in a lifecycle-safe way
-      _statusText.value = resultText
-    }
+          ImprintConfiguration.CompletionState.REJECTED -> {
+            "Application rejected\n$metadataInfo"
+          }
+
+          ImprintConfiguration.CompletionState.ABANDONED -> {
+            "Application abandoned"
+          }
+        }
+
+        // Update the status text in a lifecycle-safe way
+        _statusText.value = resultText
+      }
     Imprint.startApplication(context, configuration, onCompletion)
   }
 }

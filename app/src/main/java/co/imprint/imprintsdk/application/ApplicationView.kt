@@ -1,7 +1,6 @@
 package co.imprint.imprintsdk.application
 
 import android.app.Activity
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -24,11 +23,12 @@ fun ApplicationView(viewModel: ApplicationViewModel) {
   val context = LocalContext.current
   val activity = context as? Activity
   val logoUrl by viewModel.logoUrl.collectAsState()
-  Log.d("Kaichang", "ApplicationView: $logoUrl")
 
-  Column(modifier = Modifier
-    .fillMaxSize()
-    .background(Color.White)) {
+  Column(
+    modifier = Modifier
+      .fillMaxSize()
+      .background(Color.White)
+  ) {
     Row(
       modifier = Modifier
         .fillMaxWidth()
@@ -37,21 +37,24 @@ fun ApplicationView(viewModel: ApplicationViewModel) {
       horizontalArrangement = Arrangement.SpaceBetween,
       verticalAlignment = Alignment.CenterVertically,
     ) {
-        SubcomposeAsyncImage(
-          model = ImageRequest.Builder(context).data(logoUrl).build(),
-          contentDescription = null,
-          modifier = Modifier
-            .wrapContentWidth()
-            .padding(16.dp),
-        ) {
-          when (painter.state) {
-            is AsyncImagePainter.State.Success ->
-              SubcomposeAsyncImageContent(contentScale = ContentScale.Fit)
-            else -> Box(modifier = Modifier
+      SubcomposeAsyncImage(
+        model = ImageRequest.Builder(context).data(logoUrl).build(),
+        contentDescription = null,
+        modifier = Modifier
+          .wrapContentWidth()
+          .padding(16.dp),
+      ) {
+        when (painter.state) {
+          is AsyncImagePainter.State.Success ->
+            SubcomposeAsyncImageContent(contentScale = ContentScale.Fit)
+
+          else -> Box(
+            modifier = Modifier
               .width(56.dp)
-              .fillMaxHeight())
-          }
+              .fillMaxHeight()
+          )
         }
+      }
 
       IconButton(
         onClick = {

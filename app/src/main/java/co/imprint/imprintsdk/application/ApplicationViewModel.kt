@@ -11,7 +11,7 @@ class ApplicationViewModel(private val configuration: ImprintConfiguration) : Vi
     ImprintConfiguration.Environment.SANDBOX -> "https://apply-sandbox.stg.imprintapi.co"
     ImprintConfiguration.Environment.PRODUCTION -> "https://apply.imprint.co"
   }
-  val webUrl = "http://10.167.114.239:8080/start?session-token=${configuration.sessionToken}"
+  val webUrl = "$host/start?session-token=${configuration.sessionToken}"
 
   private val _logoUrl = MutableStateFlow<String?>(null)
   val logoUrl: StateFlow<String?> = _logoUrl.asStateFlow()
@@ -24,7 +24,10 @@ class ApplicationViewModel(private val configuration: ImprintConfiguration) : Vi
     _logoUrl.value = url
   }
 
-  fun updateCompletionState(state: ImprintConfiguration.CompletionState, metadata: Map<String, String>?) {
+  fun updateCompletionState(
+    state: ImprintConfiguration.CompletionState,
+    metadata: Map<String, String>?
+  ) {
     completionState = state
     completionMetadata = metadata
   }

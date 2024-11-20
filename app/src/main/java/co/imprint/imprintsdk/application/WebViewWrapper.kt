@@ -2,7 +2,6 @@ package co.imprint.imprintsdk.application
 
 import android.util.Log
 import android.webkit.JavascriptInterface
-import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -35,25 +34,18 @@ fun WebViewWrapper(viewModel: ApplicationViewModel) {
           object {
             @JavascriptInterface
             fun onMessage(data: String) {
-              Log.d("Kaichang", "Received message: $data")
               try {
-                // Parse the incoming JSON data
                 val jsonObject = JSONObject(data)
                 val eventName = jsonObject.optString(Constants.EVENT_NAME)
                 val metadataJson = jsonObject.optJSONObject(Constants.METADATA)
                 val logoURL = jsonObject.optString(Constants.LOGO_URL)
-                Log.d("Kaichang", "logoUrl: $logoURL")
                 viewModel.updateLogoUrl(url = logoURL)
 
-                // Convert metadata JSON to Map<String, String>
                 val metadata = metadataJson?.let { jsonToMap(it) }
-                Log.d("Kaichang", "metaData: $metadata")
-
-                // Update ViewModel or handle the received data
                 val state = ImprintConfiguration.CompletionState.fromString(eventName)
                 viewModel.updateCompletionState(state, metadata)
               } catch (e: Exception) {
-
+                Log.e("WebViewWrapper", "onMessage: Error parsing data from Web view")
               }
             }
           },
