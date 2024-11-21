@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import org.json.JSONObject
+import kotlin.math.log
 
 @Composable
 internal fun WebViewWrapper(
@@ -19,6 +20,7 @@ internal fun WebViewWrapper(
   AndroidView(
     modifier = modifier.fillMaxSize(),
     factory = { context ->
+      WebView.setWebContentsDebuggingEnabled(true)
       WebView(context).apply {
         // Configure WebView settings
         settings.apply {
@@ -66,7 +68,7 @@ internal fun WebViewWrapper(
 }
 
 internal object Constants {
-  const val CALLBACK_HANDLER_NAME = "AndroidInterface"
+  const val CALLBACK_HANDLER_NAME = "androidInterface"
   const val LOGO_URL = "logoUrl"
   const val EVENT_NAME = "eventName"
   const val METADATA = "metadata"
