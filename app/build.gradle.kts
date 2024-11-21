@@ -1,6 +1,7 @@
 plugins {
   id("com.android.library")
   id("kotlin-parcelize")
+  id("maven-publish")
   alias(libs.plugins.jetbrains.kotlin.android)
 }
 
@@ -31,6 +32,26 @@ android {
   }
   kotlinOptions {
     jvmTarget = "1.8"
+  }
+
+  publishing {
+    singleVariant("release") {
+      withSourcesJar()
+    }
+  }
+}
+
+publishing {
+  publications {
+    create<MavenPublication>("release") {
+      groupId = "com.github.Imprint-Tech"
+      artifactId = "imprint-sdk-android"
+      version = "0.0.1"
+
+      afterEvaluate {
+        from(components["release"])
+      }
+    }
   }
 }
 
