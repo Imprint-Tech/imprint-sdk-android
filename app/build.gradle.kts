@@ -10,7 +10,7 @@ android {
   compileSdk = 34
 
   defaultConfig {
-    minSdk = 29
+    minSdk = 26
     targetSdk = 34
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -44,9 +44,9 @@ android {
 publishing {
   publications {
     create<MavenPublication>("release") {
-      groupId = "com.github.Imprint-Tech"
-      artifactId = "imprint-sdk-android"
-      version = "0.0.1"
+      groupId = "com.github.Imprint"
+      artifactId = "test"
+      version = "0.0.16"
 
       afterEvaluate {
         from(components["release"])
