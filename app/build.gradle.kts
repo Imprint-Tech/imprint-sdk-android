@@ -45,8 +45,8 @@ publishing {
   publications {
     create<MavenPublication>("release") {
       groupId = "com.github.Imprint"
-      artifactId = "test"
-      version = "0.0.16"
+      artifactId = "imprint-sdk-android"
+      version = "0.1.0"
 
       afterEvaluate {
         from(components["release"])
