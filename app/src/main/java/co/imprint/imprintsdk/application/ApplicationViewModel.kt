@@ -11,7 +11,7 @@ internal class ApplicationViewModel(private val configuration: ImprintConfigurat
     ImprintConfiguration.Environment.SANDBOX -> "https://apply-sandbox.stg.imprintapi.co"
     ImprintConfiguration.Environment.PRODUCTION -> "https://apply.imprint.co"
   }
-  val webUrl = "$host/start?session-token=${configuration.sessionToken}"
+  val webUrl = "$host/start?session-token=${configuration.token}"
 
   private val _logoUrl = MutableStateFlow<String?>(null)
   val logoUrl: StateFlow<String?> = _logoUrl.asStateFlow()

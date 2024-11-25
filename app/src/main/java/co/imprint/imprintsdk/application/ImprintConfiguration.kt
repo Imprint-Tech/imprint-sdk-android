@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class ImprintConfiguration(
-  val sessionToken: String,
+  val token: String,
   val environment: Environment = Environment.PRODUCTION,
   var externalReferenceId: String? = null,
   var applicationId: String? = null,

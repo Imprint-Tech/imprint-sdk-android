@@ -14,7 +14,7 @@ class MainViewModel : ViewModel() {
   fun startApplication(context: Context) {
     // Configure the Imprint SDK with the required parameters
     val configuration = ImprintConfiguration(
-      sessionToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcl9pZCI6IkJPT0tJTkciLCJleHAiOjE3MzEwNDkyMTksImlhdCI6MTczMTA0NTYxOX0.7va3IWy5ky1EWJ7-USOMfNdJS85tfO1gwe--OwJl4gI",
+      token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcl9pZCI6IkJPT0tJTkciLCJleHAiOjE3MzEwNDkyMTksImlhdCI6MTczMTA0NTYxOX0.7va3IWy5ky1EWJ7-USOMfNdJS85tfO1gwe--OwJl4gI",
       environment = ImprintConfiguration.Environment.STAGING,
       externalReferenceId = "YOUR_CUSTOMER_ID",
       applicationId = "IMPRINT_GENERATED_GUID",
