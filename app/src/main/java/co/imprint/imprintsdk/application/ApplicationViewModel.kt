@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 internal class ApplicationViewModel(private val configuration: ImprintConfiguration) : ViewModel() {
   private val host = when (configuration.environment) {
     ImprintConfiguration.Environment.STAGING -> "https://apply.stg.imprintapi.co"
-    ImprintConfiguration.Environment.SANDBOX -> "https://apply-sandbox.stg.imprintapi.co"
+    ImprintConfiguration.Environment.SANDBOX -> "https://apply.sbx.imprint.co"
     ImprintConfiguration.Environment.PRODUCTION -> "https://apply.imprint.co"
   }
   val webUrl = "$host/start?session-token=${configuration.token}"
