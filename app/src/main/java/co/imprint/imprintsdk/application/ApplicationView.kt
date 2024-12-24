@@ -1,6 +1,8 @@
 package co.imprint.imprintsdk.application
 
 import android.app.Activity
+import android.graphics.Bitmap
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -10,19 +12,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImagePainter
-import coil.compose.SubcomposeAsyncImage
-import coil.compose.SubcomposeAsyncImageContent
-import coil.request.ImageRequest
 
 @Composable
 internal fun ApplicationView(viewModel: ApplicationViewModel) {
   val context = LocalContext.current
   val activity = context as? Activity
-  val logoUrl = viewModel.logoUrl.collectAsState().value
+  val bitmap = viewModel.logoBitmap.collectAsState().value
 
   Scaffold(
     modifier = Modifier
@@ -31,7 +29,7 @@ internal fun ApplicationView(viewModel: ApplicationViewModel) {
     containerColor = Color.White,
     topBar = {
       AppBar(
-        logoUrl = logoUrl,
+        bitmap = bitmap,
         onDismiss = {
           viewModel.onDismiss()
           activity?.finish()
@@ -45,7 +43,7 @@ internal fun ApplicationView(viewModel: ApplicationViewModel) {
 
 @Composable
 private fun AppBar(
-  logoUrl: String?,
+  bitmap: Bitmap?,
   onDismiss: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
@@ -57,26 +55,23 @@ private fun AppBar(
     horizontalArrangement = Arrangement.SpaceBetween,
     verticalAlignment = Alignment.CenterVertically,
   ) {
-    LogoImage(logoUrl)
+    LogoImage(bitmap)
     CloseButton(onDismiss)
   }
 }
 
 @Composable
-private fun LogoImage(logoUrl: String?) {
-  val context = LocalContext.current
-  SubcomposeAsyncImage(
-    model = ImageRequest.Builder(context).data(logoUrl).build(),
-    contentDescription = null,
-    modifier = Modifier
-      .wrapContentWidth()
-      .padding(16.dp),
-  ) {
-    when (painter.state) {
-      is AsyncImagePainter.State.Success -> SubcomposeAsyncImageContent(contentScale = ContentScale.Fit)
-      else -> Box(modifier = Modifier.size(56.dp))
-    }
+private fun LogoImage(bitmap: Bitmap?) {
+  if (bitmap != null) {
+    Image(
+      bitmap = bitmap.asImageBitmap(),
+      contentDescription = null,
+      modifier = Modifier
+        .wrapContentWidth()
+        .padding(16.dp),
+    )
   }
+  else Box(modifier = Modifier.size(56.dp))
 }
 
 @Composable

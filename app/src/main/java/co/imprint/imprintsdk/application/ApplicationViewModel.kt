@@ -1,9 +1,17 @@
 package co.imprint.imprintsdk.application
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 internal class ApplicationViewModel(private val configuration: ImprintConfiguration) : ViewModel() {
   private val host = when (configuration.environment) {
@@ -13,15 +21,15 @@ internal class ApplicationViewModel(private val configuration: ImprintConfigurat
   }
   val webUrl = "$host/start?token=${configuration.token}"
 
-  private val _logoUrl = MutableStateFlow<String?>(null)
-  val logoUrl: StateFlow<String?> = _logoUrl.asStateFlow()
+  private val _logoBitmap = MutableStateFlow<Bitmap?>(null)
+  val logoBitmap: StateFlow<Bitmap?> = _logoBitmap.asStateFlow()
 
   private var completionState: ImprintConfiguration.CompletionState =
     ImprintConfiguration.CompletionState.ABANDONED
   private var completionMetadata: Map<String, String>? = null
 
   fun updateLogoUrl(url: String) {
-    _logoUrl.value = url
+   loadImageBitmap(url = url)
   }
 
   fun updateCompletionState(
@@ -35,5 +43,21 @@ internal class ApplicationViewModel(private val configuration: ImprintConfigurat
   fun onDismiss() {
     val onCompletion = ImprintCallbackHolder.onApplicationCompletion
     onCompletion?.invoke(completionState, completionMetadata)
+  }
+
+  private fun loadImageBitmap(url: String) {
+    viewModelScope.launch(Dispatchers.IO) {
+      try {
+        val connection = URL(url).openConnection() as HttpURLConnection
+        connection.doInput = true
+        connection.connect()
+        val inputStream: InputStream = connection.inputStream
+        val loadedBitmap = BitmapFactory.decodeStream(inputStream)
+        _logoBitmap.value = loadedBitmap
+      } catch (e: Exception) {
+        e.printStackTrace()
+        _logoBitmap.value = null
+      }
+    }
   }
 }

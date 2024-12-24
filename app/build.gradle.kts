@@ -46,7 +46,7 @@ publishing {
     create<MavenPublication>("release") {
       groupId = "com.github.Imprint"
       artifactId = "imprint-sdk-android"
-      version = "0.1.0"
+      version = "0.1.4"
 
       afterEvaluate {
         from(components["release"])
@@ -56,7 +56,6 @@ publishing {
 }
 
 dependencies {
-
   implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.appcompat)
   implementation(libs.material)
@@ -73,7 +72,6 @@ dependencies {
   // Lifecycle dependency for view models in Compose
   implementation(libs.androidx.lifecycle.viewmodel.compose)
 
-  implementation(libs.coil.compose)
   implementation(libs.androidx.activity.compose)
 
   // Optional: For testing Compose UI
