@@ -26,7 +26,7 @@ data class ImprintConfiguration(
    * Terminal states for the application process.
    */
   enum class CompletionState {
-    OFFER_ACCEPTED, REJECTED, ABANDONED;
+    OFFER_ACCEPTED, REJECTED, ABANDONED, ERROR;
 
     companion object {
       fun fromString(value: String?): CompletionState {

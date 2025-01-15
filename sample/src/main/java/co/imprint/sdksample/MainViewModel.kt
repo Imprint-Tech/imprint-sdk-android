@@ -14,8 +14,8 @@ class MainViewModel : ViewModel() {
   fun startApplication(context: Context) {
     // Configure the Imprint SDK with the required parameters
     val configuration = ImprintConfiguration(
-      token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcl9pZCI6IkJPT0tJTkciLCJleHAiOjE3MzEwNDkyMTksImlhdCI6MTczMTA0NTYxOX0.7va3IWy5ky1EWJ7-USOMfNdJS85tfO1gwe--OwJl4gI",
-      environment = ImprintConfiguration.Environment.STAGING,
+      token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcl9pZCI6IjEyMyIsInByb2R1Y3RVVUlEIjoiUFJEVC12MS1hMGVmMzNlOS01OTc2LTRlNTYtYWVkMS0yZDBkN2NmOTQwZDUiLCJleHAiOjE3MzEwNDkyMTksImlhdCI6MTczMTA0NTYxOX0.6W35ZsUTK1qXirOUymqlyLC8jtM5uoaeb9ZagbxrmXY",
+      environment = ImprintConfiguration.Environment.SANDBOX,
       externalReferenceId = "YOUR_CUSTOMER_ID",
       applicationId = "IMPRINT_GENERATED_GUID",
       additionalData = mapOf("other" to "value"),
@@ -34,6 +34,9 @@ class MainViewModel : ViewModel() {
           }
           ImprintConfiguration.CompletionState.ABANDONED -> {
             "Application abandoned"
+          }
+          ImprintConfiguration.CompletionState.ERROR -> {
+            "Error occurred"
           }
         }
         _statusText.value = resultText
