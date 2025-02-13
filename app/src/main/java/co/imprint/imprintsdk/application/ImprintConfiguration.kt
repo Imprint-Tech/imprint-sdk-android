@@ -8,11 +8,9 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class ImprintConfiguration(
-  val token: String,
+  val client_secret: String,
   val environment: Environment = Environment.PRODUCTION,
-  var externalReferenceId: String? = null,
-  var applicationId: String? = null,
-  var additionalData: Map<String, String>? = null,
+  var application_id: String? = null,
 ) : Parcelable {
 
   /**
