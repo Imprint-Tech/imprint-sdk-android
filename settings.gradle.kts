@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "Imprint SDK"
 include(":app")
-include(":sample")
