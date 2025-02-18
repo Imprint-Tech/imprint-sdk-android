@@ -5,7 +5,6 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".application.ApplicationActivity"
-            android:exported="true"
-            android:theme="@style/Theme.ImprintSDK" />
+            android:exported="true"/>
     </application>
 </manifest>

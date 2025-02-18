@@ -3,6 +3,7 @@ package co.imprint.imprintsdk.application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material3.MaterialTheme
 
 
 internal class ApplicationActivity : ComponentActivity() {
@@ -16,7 +17,9 @@ internal class ApplicationActivity : ComponentActivity() {
       val viewModel = ApplicationViewModel(configuration = configuration)
       // Set the Compose UI content
       setContent {
-        ApplicationView(viewModel)
+        MaterialTheme {
+          ApplicationView(viewModel)
+        }
       }
     }
   }
