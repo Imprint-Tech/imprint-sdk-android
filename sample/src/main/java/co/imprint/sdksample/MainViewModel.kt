@@ -15,8 +15,8 @@ class MainViewModel : ViewModel() {
     // Configure the Imprint SDK with the required parameters
     val configuration = ImprintConfiguration(
       clientSecret = "QzMyNzg4QzgtNEUwOS00QkU4LThDMjEtMkU5OUQ3QzkwRDhGCg==",
+      partnerReference = "TEST-PARTNER_REFERENCE",
       environment = ImprintConfiguration.Environment.SANDBOX,
-      applicationId = "IMPRINT_GENERATED_GUID",
     )
 
     // Callback function triggered when the application process is completed

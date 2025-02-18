@@ -19,7 +19,7 @@ internal class ApplicationViewModel(private val configuration: ImprintConfigurat
     ImprintConfiguration.Environment.SANDBOX -> "https://apply.sbx.imprint.co"
     ImprintConfiguration.Environment.PRODUCTION -> "https://apply.imprint.co"
   }
-  val webUrl = "$host/start?client_secret=${configuration.clientSecret}"
+  val webUrl = "$host/start?client_secret=${configuration.clientSecret}&partner_reference=${configuration.partnerReference}"
 
   private val _logoBitmap = MutableStateFlow<Bitmap?>(null)
   val logoBitmap: StateFlow<Bitmap?> = _logoBitmap.asStateFlow()
