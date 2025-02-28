@@ -73,8 +73,8 @@ internal object Constants {
   const val DATA = "data"
 }
 
-private fun jsonToMap(jsonObject: JSONObject): Map<String, String> {
-  val map = mutableMapOf<String, String>()
+private fun jsonToMap(jsonObject: JSONObject): Map<String, String?> {
+  val map = mutableMapOf<String, String?>()
   val keys = jsonObject.keys()
   while (keys.hasNext()) {
     val key = keys.next()
