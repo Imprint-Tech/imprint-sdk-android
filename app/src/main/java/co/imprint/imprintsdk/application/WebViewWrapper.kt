@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import org.json.JSONObject
-import kotlin.math.log
 
 @Composable
 internal fun WebViewWrapper(
@@ -42,13 +41,13 @@ internal fun WebViewWrapper(
               try {
                 val jsonObject = JSONObject(data)
                 val eventName = jsonObject.optString(Constants.EVENT_NAME)
-                val metadataJson = jsonObject.optJSONObject(Constants.METADATA)
+                val dataJson = jsonObject.optJSONObject(Constants.DATA)
                 val logoURL = jsonObject.optString(Constants.LOGO_URL)
                 viewModel.updateLogoUrl(url = logoURL)
 
-                val metadata = metadataJson?.let { jsonToMap(it) }
+                val completionData = dataJson?.let { jsonToMap(it) }
                 val state = ImprintConfiguration.CompletionState.fromString(eventName)
-                viewModel.updateCompletionState(state, metadata)
+                viewModel.updateCompletionState(state, completionData)
               } catch (e: Exception) {
                 Log.e("WebViewWrapper", "onMessage: Error parsing data from Web view")
               }
@@ -71,7 +70,7 @@ internal object Constants {
   const val CALLBACK_HANDLER_NAME = "androidInterface"
   const val LOGO_URL = "logoUrl"
   const val EVENT_NAME = "eventName"
-  const val METADATA = "metadata"
+  const val DATA = "data"
 }
 
 private fun jsonToMap(jsonObject: JSONObject): Map<String, String> {

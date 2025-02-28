@@ -26,7 +26,7 @@ internal class ApplicationViewModel(private val configuration: ImprintConfigurat
 
   private var completionState: ImprintConfiguration.CompletionState =
     ImprintConfiguration.CompletionState.ABANDONED
-  private var completionMetadata: Map<String, String>? = null
+  private var completionData: Map<String, String?>? = null
 
   fun updateLogoUrl(url: String) {
    loadImageBitmap(url = url)
@@ -34,15 +34,15 @@ internal class ApplicationViewModel(private val configuration: ImprintConfigurat
 
   fun updateCompletionState(
     state: ImprintConfiguration.CompletionState,
-    metadata: Map<String, String>?
+    data: Map<String, String?>?,
   ) {
     completionState = state
-    completionMetadata = metadata
+    completionData = data
   }
 
   fun onDismiss() {
     val onCompletion = ImprintCallbackHolder.onApplicationCompletion
-    onCompletion?.invoke(completionState, completionMetadata)
+    onCompletion?.invoke(completionState, completionData)
   }
 
   private fun loadImageBitmap(url: String) {

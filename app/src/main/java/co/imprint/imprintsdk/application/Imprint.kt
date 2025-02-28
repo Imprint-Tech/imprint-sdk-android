@@ -2,6 +2,7 @@ package co.imprint.imprintsdk.application
 
 import android.content.Context
 import android.content.Intent
+import co.imprint.imprintsdk.application.ApplicationActivity.Companion.APPLICATION_CONFIGURATION
 
 /**
  * Main class for managing the Imprint application process.
@@ -16,11 +17,11 @@ object Imprint {
   fun startApplication(
     context: Context,
     configuration: ImprintConfiguration,
-    onCompletion: (ImprintConfiguration.CompletionState, Map<String, String>?) -> Unit,
+    onCompletion: (ImprintConfiguration.CompletionState, Map<String, String?>?) -> Unit,
   ) {
     ImprintCallbackHolder.onApplicationCompletion = onCompletion
     val intent = Intent(context, ApplicationActivity::class.java).apply {
-      putExtra("config", configuration)
+      putExtra(APPLICATION_CONFIGURATION, configuration)
     }
     context.startActivity(intent)
   }
