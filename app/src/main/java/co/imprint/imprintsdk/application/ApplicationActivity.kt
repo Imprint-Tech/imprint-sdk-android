@@ -17,11 +17,11 @@ internal class ApplicationActivity : ComponentActivity() {
     super.onCreate(savedInstanceState)
 
     // Retrieve configuration and make it non-nullable
-    val configuration = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    val configuration = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
       intent.getParcelableExtra(APPLICATION_CONFIGURATION, ImprintConfiguration::class.java)
     } else {
       @Suppress("DEPRECATION")
-      intent.getParcelableExtra(APPLICATION_CONFIGURATION)
+      intent.getParcelableExtra<ImprintConfiguration>(APPLICATION_CONFIGURATION)
     }
 
     configuration?.let {
