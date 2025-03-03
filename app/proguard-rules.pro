@@ -23,4 +23,4 @@
 -keep class co.imprint.imprintsdk.application.Imprint { *; }
 -keep class co.imprint.imprintsdk.application.ImprintConfiguration { *; }
 -keep enum co.imprint.imprintsdk.application.ImprintConfiguration$Environment { *; }
--keep enum co.imprint.imprintsdk.application.ImprintConfiguration$CompletionState { *; }
+-keep enum co.imprint.imprintsdk.application.CompletionState { *; }

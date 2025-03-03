@@ -24,25 +24,24 @@ internal class ApplicationViewModel(private val configuration: ImprintConfigurat
   private val _logoBitmap = MutableStateFlow<Bitmap?>(null)
   val logoBitmap: StateFlow<Bitmap?> = _logoBitmap.asStateFlow()
 
-  private var completionState: ImprintConfiguration.CompletionState =
-    ImprintConfiguration.CompletionState.ABANDONED
-  private var completionMetadata: Map<String, String>? = null
+  private var completionState: CompletionState = CompletionState.ABANDONED
+  private var completionData: Map<String, String?>? = null
 
   fun updateLogoUrl(url: String) {
    loadImageBitmap(url = url)
   }
 
   fun updateCompletionState(
-    state: ImprintConfiguration.CompletionState,
-    metadata: Map<String, String>?
+    state: CompletionState,
+    data: Map<String, String?>?,
   ) {
     completionState = state
-    completionMetadata = metadata
+    completionData = data
   }
 
   fun onDismiss() {
     val onCompletion = ImprintCallbackHolder.onApplicationCompletion
-    onCompletion?.invoke(completionState, completionMetadata)
+    onCompletion?.invoke(completionState, completionData)
   }
 
   private fun loadImageBitmap(url: String) {
