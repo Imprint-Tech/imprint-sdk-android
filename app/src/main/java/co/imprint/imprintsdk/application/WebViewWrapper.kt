@@ -46,7 +46,7 @@ internal fun WebViewWrapper(
                 viewModel.updateLogoUrl(url = logoURL)
 
                 val completionData = dataJson?.let { jsonToMap(it) }
-                val state = ImprintConfiguration.CompletionState.fromString(eventName)
+                val state = CompletionState.fromString(eventName)
                 viewModel.updateCompletionState(state, completionData)
               } catch (e: Exception) {
                 Log.e("WebViewWrapper", "onMessage: Error parsing data from Web view")
