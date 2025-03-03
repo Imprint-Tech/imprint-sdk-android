@@ -15,7 +15,7 @@ object Imprint {
   fun startApplication(
     context: Context,
     configuration: ImprintConfiguration,
-    onCompletion: (ImprintConfiguration.CompletionState, Map<String, String?>?) -> Unit,
+    onCompletion: (CompletionState, Map<String, String?>?) -> Unit,
   ) {
     ImprintCallbackHolder.onApplicationCompletion = onCompletion
     val intent = Intent(context, ApplicationActivity::class.java).apply {

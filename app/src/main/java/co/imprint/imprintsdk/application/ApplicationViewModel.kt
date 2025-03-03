@@ -24,8 +24,7 @@ internal class ApplicationViewModel(private val configuration: ImprintConfigurat
   private val _logoBitmap = MutableStateFlow<Bitmap?>(null)
   val logoBitmap: StateFlow<Bitmap?> = _logoBitmap.asStateFlow()
 
-  private var completionState: ImprintConfiguration.CompletionState =
-    ImprintConfiguration.CompletionState.ABANDONED
+  private var completionState: CompletionState = CompletionState.ABANDONED
   private var completionData: Map<String, String?>? = null
 
   fun updateLogoUrl(url: String) {
@@ -33,7 +32,7 @@ internal class ApplicationViewModel(private val configuration: ImprintConfigurat
   }
 
   fun updateCompletionState(
-    state: ImprintConfiguration.CompletionState,
+    state: CompletionState,
     data: Map<String, String?>?,
   ) {
     completionState = state
