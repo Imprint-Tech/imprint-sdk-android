@@ -1,4 +1,4 @@
-package co.imprint.imprintsdk.application
+package co.imprint.sdk.ui
 
 import android.util.Log
 import android.webkit.JavascriptInterface
@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
+import co.imprint.sdk.viewmodel.ApplicationViewModel
+import co.imprint.sdk.api.CompletionState
 import org.json.JSONObject
 
 @Composable
@@ -19,7 +21,6 @@ internal fun WebViewWrapper(
   AndroidView(
     modifier = modifier.fillMaxSize(),
     factory = { context ->
-      WebView.setWebContentsDebuggingEnabled(true)
       WebView(context).apply {
         // Configure WebView settings
         settings.apply {

@@ -1,4 +1,4 @@
-package co.imprint.imprintsdk.application
+package co.imprint.sdk.ui
 
 import android.app.Activity
 import android.graphics.Bitmap
@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import co.imprint.sdk.viewmodel.ApplicationViewModel
 
 @Composable
 internal fun ApplicationView(viewModel: ApplicationViewModel) {

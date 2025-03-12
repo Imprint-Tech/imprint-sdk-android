@@ -1,9 +1,12 @@
-package co.imprint.imprintsdk.application
+package co.imprint.sdk.viewmodel
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import co.imprint.sdk.api.CompletionState
+import co.imprint.sdk.callback.ImprintCallbackHolder
+import co.imprint.sdk.api.ImprintConfiguration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

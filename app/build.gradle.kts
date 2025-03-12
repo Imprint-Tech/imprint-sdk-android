@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-  namespace = "co.imprint.imprintsdk"
+  namespace = "co.imprint.sdk"
   compileSdk = 34
 
   defaultConfig {
@@ -22,8 +22,7 @@ android {
 
   buildTypes {
     release {
-      isMinifyEnabled = true
-      proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+      isMinifyEnabled = false
     }
   }
   compileOptions {
@@ -44,9 +43,9 @@ android {
 publishing {
   publications {
     create<MavenPublication>("release") {
-      groupId = "com.github.Imprint"
-      artifactId = "imprint-sdk-android"
-      version = "0.1.8"
+      groupId = "co.imprint.sdk"
+      artifactId = "imprint-sdk"
+      version = "0.2.0"
 
       afterEvaluate {
         from(components["release"])
