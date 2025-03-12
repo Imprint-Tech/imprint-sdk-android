@@ -1,4 +1,4 @@
-package co.imprint.imprintsdk.application
+package co.imprint.sdk.api
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

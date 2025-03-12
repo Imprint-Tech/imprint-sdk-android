@@ -1,4 +1,4 @@
-package co.imprint.imprintsdk
+package co.imprint.sdk
 
 import org.junit.Test
 

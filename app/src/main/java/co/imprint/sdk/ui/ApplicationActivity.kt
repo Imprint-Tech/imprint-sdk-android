@@ -1,10 +1,12 @@
-package co.imprint.imprintsdk.application
+package co.imprint.sdk.ui
 
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
+import co.imprint.sdk.viewmodel.ApplicationViewModel
+import co.imprint.sdk.api.ImprintConfiguration
 
 
 internal class ApplicationActivity : ComponentActivity() {

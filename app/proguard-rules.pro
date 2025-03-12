@@ -19,8 +19,3 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
-
--keep class co.imprint.imprintsdk.application.Imprint { *; }
--keep class co.imprint.imprintsdk.application.ImprintConfiguration { *; }
--keep enum co.imprint.imprintsdk.application.ImprintConfiguration$Environment { *; }
--keep enum co.imprint.imprintsdk.application.CompletionState { *; }
