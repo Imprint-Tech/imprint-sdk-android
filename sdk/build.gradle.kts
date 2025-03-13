@@ -63,9 +63,9 @@ dependencies {
   androidTestImplementation(libs.androidx.espresso.core)
 
   // Compose core dependencies
-  implementation(libs.ui)
+  implementation(libs.androidx.ui)
   implementation(libs.material3)
-  implementation(libs.ui.tooling.preview)
+  implementation(libs.androidx.ui.tooling.preview)
   implementation(libs.androidx.runtime.livedata)
 
   // Lifecycle dependency for view models in Compose
@@ -74,6 +74,6 @@ dependencies {
   implementation(libs.androidx.activity.compose)
 
   // Optional: For testing Compose UI
-  androidTestImplementation(libs.ui.test.junit4)
-  debugImplementation(libs.ui.tooling)
+  androidTestImplementation(libs.androidx.ui.test.junit4)
+  debugImplementation(libs.androidx.ui.tooling)
 }
