@@ -83,7 +83,7 @@ enum class Environment(val displayName: String) {
   PRODUCTION("Production");
 
   companion object {
-    fun fromIndex(index: Int): Environment = entries[index]
-    fun toIndex(environment: Environment): Int = entries.indexOf(environment)
+    fun fromIndex(index: Int): Environment = values()[index]
+    fun toIndex(environment: Environment): Int = values().indexOf(environment)
   }
 }

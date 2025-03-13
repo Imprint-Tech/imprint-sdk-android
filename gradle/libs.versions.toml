@@ -1,6 +1,6 @@
 [versions]
 agp = "8.5.1"
-kotlin = "1.9.0"
+kotlin = "1.7.20"
 coreKtx = "1.13.0"
 junit = "4.14"
 junitVersion = "1.2.1"
@@ -17,7 +17,7 @@ runtimeLivedata = "1.7.5"
 activityCompose = "1.7.5"
 lifecycleRuntimeKtxVersion = "2.8.7"
 composeBom = "2024.04.01"
-kotlinBom = "1.9.0"
+kotlinBom = "1.7.20"
 imprintSDK = "test-release-to-jitpack-SNAPSHOT"
 
 [libraries]
