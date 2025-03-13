@@ -62,5 +62,4 @@ dependencies {
   implementation(libs.androidx.lifecycle.viewmodel.compose)
   implementation(libs.androidx.ui.tooling.preview)
   implementation(libs.imprint.sdk)
-  //  implementation(files("libs/app-release.aar"))
 }
