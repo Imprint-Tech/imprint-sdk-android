@@ -18,7 +18,7 @@ activityCompose = "1.10.1"
 lifecycleRuntimeKtxVersion = "2.8.7"
 composeBom = "2025.03.00"
 kotlinBom = "2.1.0"
-imprintSDK = "test-release-to-jitpack-SNAPSHOT"
+imprintSDK = "add-demo-app-SNAPSHOT"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
