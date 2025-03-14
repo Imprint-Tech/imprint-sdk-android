@@ -45,4 +45,5 @@ imprint-sdk = { group = "com.github.Imprint-Tech", name = "imprint-sdk-android",
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 

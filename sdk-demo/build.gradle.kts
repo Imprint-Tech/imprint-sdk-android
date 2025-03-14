@@ -3,16 +3,17 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.jetbrains.kotlin.android)
+  alias(libs.plugins.compose.compiler)
 }
 
 android {
   namespace = "co.imprint.sdkdemo"
-  compileSdk = 34
+  compileSdk = 35
 
   defaultConfig {
     applicationId = "co.imprint.sdkdemo"
     minSdk = 26
-    targetSdk = 34
+    targetSdk = 35
     versionCode = 1
     versionName = "1.0"
 
