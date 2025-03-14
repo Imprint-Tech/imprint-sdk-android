@@ -80,7 +80,7 @@ fun InputField(label: String, value: String, onValueChange: (String) -> Unit, ma
 
 @Composable
 fun EnvironmentTabs(selectedEnv: Environment, onEnvSelected: (Environment) -> Unit) {
-  val environments = Environment.values()
+  val environments = Environment.entries.toTypedArray()
 
   TabRow(
     selectedTabIndex = Environment.toIndex(selectedEnv)
