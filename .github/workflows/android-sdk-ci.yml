@@ -1,0 +1,41 @@
+name: Android SDK CI
+
+# Controls when the workflow will run
+on:
+  pull_request:
+    branches: [ master ]
+  push:
+    branches: [ SPND-1121-build-ci-cd-pipeline-for-android-sdk ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+      name: Build & Test
+      runs-on: self-hosted
+      steps:
+        - name: Cancel Previous Runs
+          uses: styfle/cancel-workflow-action@0.9.1
+
+        - name: Checkout Repository
+          uses: actions/checkout@v3
+
+        - name: Setup JDK
+          uses: actions/setup-java@v3
+          with:
+            distribution: 'zulu'
+            java-version: '17'
+
+        - name: Build SDK
+          run: ./gradlew assembleRelease
+
+        - name: Run Unit Tests
+          run: ./gradlew test
+
+        - name: Upload Build Artifacts
+          uses: actions/upload-artifact@v3
+          with:
+            name: sdk-release
+            path: sdk/build/outputs/aar/*.aar
