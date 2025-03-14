@@ -50,7 +50,6 @@ publishing {
 
       afterEvaluate {
         from(components["release"])
-        artifact(tasks.getByName("bundleReleaseAar"))
       }
     }
   }
