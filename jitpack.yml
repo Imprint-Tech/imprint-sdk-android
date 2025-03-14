@@ -1,0 +1,7 @@
+jdk:
+  - openjdk17
+install:
+  - ./gradlew :sdk:publishReleasePublicationToMavenLocal
+artifacts:
+  - path: sdk/build/outputs/aar/sdk-release.aar
+    name: sdk-release.aar
