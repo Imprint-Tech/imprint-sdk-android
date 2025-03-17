@@ -2,9 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <application
-        android:name=".core.ImprintSDKApplication"
-        android:usesCleartextTraffic="true">
+    <application android:usesCleartextTraffic="true">
         <activity
             android:name="co.imprint.sdk.presentation.ApplicationActivity"
             android:exported="true" />
