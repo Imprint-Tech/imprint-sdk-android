@@ -1,6 +1,7 @@
-package co.imprint.sdk.api
+package co.imprint.sdk.domain.model
 
 import android.os.Parcelable
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -9,19 +10,16 @@ import kotlinx.parcelize.Parcelize
  * @param clientSecret The client secret used to initiate the application session. Generated through Create Customer Session.
  * Please refer to the API documentation (https://docs.imprint.co/api-reference/customer-sessions/create-a-new-customer-session) for details on obtaining a clientSecret.
  * @param partnerReference The unique identifier for the program provided by the Imprint team.
- * @param environment The environment for the application process. Default value is [Environment.PRODUCTION].
+ * @param environment The environment for the application process. Default value is [ImprintEnvironment.PRODUCTION].
  */
 @Parcelize
 data class ImprintConfiguration(
   val clientSecret: String,
   val partnerReference: String,
-  val environment: Environment = Environment.PRODUCTION,
+  val environment: ImprintEnvironment = ImprintEnvironment.PRODUCTION,
 ) : Parcelable {
 
-  /**
-   * Available environments for the application process.
-   */
-  enum class Environment {
-    STAGING, SANDBOX, PRODUCTION
-  }
+  @IgnoredOnParcel
+  internal val webUrl: String =
+    "${environment.hostUrl}/start?client_secret=${clientSecret}&partner_reference=${partnerReference}"
 }

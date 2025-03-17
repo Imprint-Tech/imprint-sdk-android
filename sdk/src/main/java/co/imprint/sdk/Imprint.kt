@@ -2,11 +2,11 @@ package co.imprint.sdk
 
 import android.content.Context
 import android.content.Intent
-import co.imprint.sdk.api.CompletionState
-import co.imprint.sdk.callback.ImprintCallbackHolder
-import co.imprint.sdk.api.ImprintConfiguration
-import co.imprint.sdk.ui.ApplicationActivity
-import co.imprint.sdk.ui.ApplicationActivity.Companion.APPLICATION_CONFIGURATION
+import co.imprint.sdk.domain.model.ImprintCompletionState
+import co.imprint.sdk.domain.ImprintCallbackHolder
+import co.imprint.sdk.domain.model.ImprintConfiguration
+import co.imprint.sdk.presentation.ApplicationActivity
+import co.imprint.sdk.presentation.ApplicationActivity.Companion.APPLICATION_CONFIGURATION
 
 object Imprint {
 
@@ -19,7 +19,7 @@ object Imprint {
   fun startApplication(
     context: Context,
     configuration: ImprintConfiguration,
-    onCompletion: (CompletionState, Map<String, String?>?) -> Unit,
+    onCompletion: (ImprintCompletionState, Map<String, String?>?) -> Unit,
   ) {
     ImprintCallbackHolder.onApplicationCompletion = onCompletion
     val intent = Intent(context, ApplicationActivity::class.java).apply {

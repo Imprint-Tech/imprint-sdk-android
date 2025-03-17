@@ -1,49 +1,28 @@
-package co.imprint.sdk.ui
+package co.imprint.sdk.presentation.components
 
-import android.app.Activity
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import co.imprint.sdk.viewmodel.ApplicationViewModel
 
 @Composable
-internal fun ApplicationView(viewModel: ApplicationViewModel) {
-  val context = LocalContext.current
-  val activity = context as? Activity
-  val bitmap = viewModel.logoBitmap.collectAsState().value
-
-  Scaffold(
-    modifier = Modifier
-      .fillMaxSize()
-      .background(Color.White),
-    containerColor = Color.White,
-    topBar = {
-      AppBar(
-        bitmap = bitmap,
-        onDismiss = {
-          viewModel.onDismiss()
-          activity?.finish()
-        },
-      )
-    }
-  ) { innerPadding ->
-    WebViewWrapper(viewModel = viewModel, modifier = Modifier.padding(innerPadding))
-  }
-}
-
-@Composable
-private fun AppBar(
+internal fun AppBar(
   bitmap: Bitmap?,
   onDismiss: () -> Unit,
   modifier: Modifier = Modifier,
@@ -71,8 +50,7 @@ private fun LogoImage(bitmap: Bitmap?) {
         .wrapContentWidth()
         .padding(16.dp),
     )
-  }
-  else Box(modifier = Modifier.size(56.dp))
+  } else Box(modifier = Modifier.size(56.dp))
 }
 
 @Composable
