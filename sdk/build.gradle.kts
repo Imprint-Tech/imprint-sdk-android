@@ -4,6 +4,8 @@ plugins {
   id("maven-publish")
   alias(libs.plugins.jetbrains.kotlin.android)
   alias(libs.plugins.compose.compiler)
+  alias(libs.plugins.ksp)
+  alias(libs.plugins.hilt.android.plugin)
 }
 
 android {
@@ -12,8 +14,6 @@ android {
 
   defaultConfig {
     minSdk = 26
-    targetSdk = 35
-
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
 
@@ -71,8 +71,11 @@ dependencies {
 
   // Lifecycle dependency for view models in Compose
   implementation(libs.androidx.lifecycle.viewmodel.compose)
-
   implementation(libs.androidx.activity.compose)
+
+  //Hilt
+  implementation(libs.hilt.android)
+  ksp(libs.hilt.compiler)
 
   // Optional: For testing Compose UI
   androidTestImplementation(libs.androidx.ui.test.junit4)
