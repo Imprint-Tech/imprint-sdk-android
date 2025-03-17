@@ -9,6 +9,7 @@ import co.imprint.sdk.di.IoDispatcher
 import co.imprint.sdk.domain.ImprintCallbackHolder
 import co.imprint.sdk.domain.model.ImprintCompletionState
 import co.imprint.sdk.domain.model.ImprintConfiguration
+import co.imprint.sdk.presentation.ApplicationActivity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
