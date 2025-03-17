@@ -16,7 +16,7 @@ dependencies {
 ## Implementation
 ### 1. Import the SDK
 ```Kotlin
-import co.imprint.imprintsdk.application.Imprint
+import co.imprint.sdk.Imprint
 ```
 
 ### 2. Configuration
