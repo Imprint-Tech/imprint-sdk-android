@@ -1,4 +1,4 @@
-package co.imprint.sdk.api
+package co.imprint.sdk.domain.model
 
 /**
  * Terminal states for the application process.

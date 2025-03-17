@@ -1,5 +1,6 @@
-package co.imprint.sdk.ui
+package co.imprint.sdk.presentation.components
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebSettings
@@ -9,10 +10,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import co.imprint.sdk.viewmodel.ApplicationViewModel
-import co.imprint.sdk.api.CompletionState
+import co.imprint.sdk.domain.model.CompletionState
+import co.imprint.sdk.presentation.utils.toMapOrNull
+import co.imprint.sdk.presentation.ApplicationViewModel
 import org.json.JSONObject
 
+@SuppressLint("SetJavaScriptEnabled")
 @Composable
 internal fun WebViewWrapper(
   viewModel: ApplicationViewModel,
@@ -46,7 +49,7 @@ internal fun WebViewWrapper(
                 val logoURL = jsonObject.optString(Constants.LOGO_URL)
                 viewModel.updateLogoUrl(url = logoURL)
 
-                val completionData = dataJson?.let { jsonToMap(it) }
+                val completionData = dataJson.toMapOrNull()
                 val state = CompletionState.fromString(eventName)
                 viewModel.updateCompletionState(state, completionData)
               } catch (e: Exception) {
@@ -61,7 +64,7 @@ internal fun WebViewWrapper(
         loadUrl(viewModel.webUrl)
       }
     },
-    update = { webView ->
+    update = { _ ->
       // Optional: Additional WebView updates if needed
     }
   )
@@ -72,15 +75,4 @@ internal object Constants {
   const val LOGO_URL = "logoUrl"
   const val EVENT_NAME = "eventName"
   const val DATA = "data"
-}
-
-private fun jsonToMap(jsonObject: JSONObject): Map<String, String?> {
-  val map = mutableMapOf<String, String?>()
-  val keys = jsonObject.keys()
-  while (keys.hasNext()) {
-    val key = keys.next()
-    val value = jsonObject.optString(key) // Safely get the string value
-    map[key] = value
-  }
-  return map
 }
