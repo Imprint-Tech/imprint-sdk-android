@@ -5,12 +5,9 @@ import android.graphics.BitmapFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import co.imprint.sdk.di.IoDispatcher
 import co.imprint.sdk.domain.ImprintCallbackHolder
 import co.imprint.sdk.domain.model.ImprintCompletionState
 import co.imprint.sdk.domain.model.ImprintConfiguration
-import co.imprint.sdk.presentation.ApplicationActivity
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,11 +16,9 @@ import kotlinx.coroutines.launch
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
-import javax.inject.Inject
 
-@HiltViewModel
-internal class ApplicationViewModel @Inject constructor(
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+internal class ApplicationViewModel(
+  private val ioDispatcher: CoroutineDispatcher,
   state: SavedStateHandle,
 ) : ViewModel() {
 

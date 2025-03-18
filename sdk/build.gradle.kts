@@ -4,8 +4,8 @@ plugins {
   id("maven-publish")
   alias(libs.plugins.jetbrains.kotlin.android)
   alias(libs.plugins.compose.compiler)
-  alias(libs.plugins.ksp)
-  alias(libs.plugins.hilt.android.plugin)
+//  alias(libs.plugins.ksp)
+//  alias(libs.plugins.hilt.android.plugin)
 }
 
 android {
@@ -74,8 +74,9 @@ dependencies {
   implementation(libs.androidx.activity.compose)
 
   //Hilt
-  implementation(libs.hilt.android)
-  ksp(libs.hilt.compiler)
+//  implementation(libs.hilt.android)
+//  ksp(libs.hilt.compiler)
+  implementation("io.insert-koin:koin-android:4.0.2")
 
   // Optional: For testing Compose UI
   androidTestImplementation(libs.androidx.ui.test.junit4)

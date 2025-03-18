@@ -5,9 +5,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material3.MaterialTheme
-import dagger.hilt.android.AndroidEntryPoint
+import co.imprint.sdk.di.dispatchersModule
+import co.imprint.sdk.di.viewModelModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 
-@AndroidEntryPoint
 internal class ApplicationActivity : ComponentActivity() {
 
   companion object {
@@ -16,6 +19,15 @@ internal class ApplicationActivity : ComponentActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
+    startKoin {
+      // Log Koin into Android logger
+      androidLogger()
+      // Reference Android context
+      androidContext(applicationContext)
+      // Load modules
+      modules(dispatchersModule, viewModelModule)
+    }
 
     val viewModel: ApplicationViewModel by viewModels()
     setContent {
