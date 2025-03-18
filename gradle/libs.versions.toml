@@ -18,7 +18,7 @@ activityCompose = "1.10.1"
 lifecycleRuntimeKtxVersion = "2.8.7"
 composeBom = "2025.03.00"
 kotlinBom = "2.1.0"
-imprintSDK = "SPND-1161-adr-perform-code-enhancements-to-the-sdk-codebase-SNAPSHOT"
+imprintSDK = "SPND-1161-adr-perform-code-enhancements-to-the-sdk-codebase-2-SNAPSHOT"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
