@@ -23,6 +23,64 @@ jobs:
       - name: Build SDK
         run: ./gradlew assembleRelease
 
+      # Generate changelog - sanitize output
+      - name: Generate Changelog
+        id: changelog
+        run: |
+          set +x  # Don't echo commands
+          # Find the previous tag
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+                 
+          if [ -z "$PREVIOUS_TAG" ]; then
+            # If no previous tag exists, use all commits
+            echo "No previous tag found, including all commits in changelog"
+            CHANGELOG=$(git log --pretty=format:"- %s (%h)" --no-merges | grep -v -i "secret\|password\|token\|key\|credential")
+          else
+            # Get commits since the last tag
+            echo "Generating changelog since tag: $PREVIOUS_TAG"
+            CHANGELOG=$(git log ${PREVIOUS_TAG}..HEAD --pretty=format:"- %s (%h)" --no-merges | grep -v -i "secret\|password\|token\|key\|credential")
+          fi
+                 
+          # Categorize commits - sanitize output 
+          FEATURES=$(echo "$CHANGELOG" | grep -i "feat\|feature\|add" | grep -v -i "secret\|password\|token\|key\|credential" || echo "")
+          FIXES=$(echo "$CHANGELOG" | grep -i "fix\|bug\|issue" | grep -v -i "secret\|password\|token\|key\|credential" || echo "")
+          IMPROVEMENTS=$(echo "$CHANGELOG" | grep -i "improve\|enhance\|refactor\|perf" | grep -v -i "secret\|password\|token\|key\|credential" || echo "")
+          OTHERS=$(echo "$CHANGELOG" | grep -v -i "feat\|feature\|add\|fix\|bug\|issue\|improve\|enhance\|refactor\|perf\|secret\|password\|token\|key\|credential" || echo "")
+                 
+          # Create formatted changelog
+          # Use GitHub Actions' multiline output syntax directly
+          {
+            echo "changelog<<CHANGELOG_EOF"
+            echo "## What's Changed in v${{ steps.version.outputs.new_version }}"
+            echo ""
+                 
+            if [ ! -z "$FEATURES" ]; then
+              echo "### New Features"
+              echo "$FEATURES"
+              echo ""
+            fi
+                 
+            if [ ! -z "$FIXES" ]; then
+              echo "### Bug Fixes"
+              echo "$FIXES"
+              echo ""
+            fi
+                 
+            if [ ! -z "$IMPROVEMENTS" ]; then
+              echo "### Improvements"
+              echo "$IMPROVEMENTS"
+              echo ""
+            fi
+                 
+            if [ ! -z "$OTHERS" ]; then
+              echo "### Other Changes"
+              echo "$OTHERS"
+              echo ""
+            fi
+                 
+            echo "CHANGELOG_EOF"
+          } >> $GITHUB_OUTPUT
+
       - name: Create Release Tag
         id: version
         run: |
