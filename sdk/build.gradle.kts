@@ -74,9 +74,7 @@ dependencies {
   implementation(libs.androidx.activity.compose)
 
   //Hilt
-//  implementation(libs.hilt.android)
-//  ksp(libs.hilt.compiler)
-  implementation("io.insert-koin:koin-android:4.0.2")
+  implementation(libs.koin.android)
 
   // Optional: For testing Compose UI
   androidTestImplementation(libs.androidx.ui.test.junit4)
