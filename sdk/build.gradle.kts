@@ -55,6 +55,17 @@ publishing {
   }
 }
 
+tasks.register("printVersion") {
+  doLast {
+    val publishing = project.extensions.findByType<PublishingExtension>()
+    val version = publishing?.publications?.findByName("release")?.let { publication ->
+      (publication as MavenPublication).version
+    }
+
+    println(version ?: "0.0.0")  // Default to "0.0.0" if not found
+  }
+}
+
 dependencies {
   implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.appcompat)
