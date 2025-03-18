@@ -1,9 +1,13 @@
 package co.imprint.sdk.di
 
+import androidx.lifecycle.SavedStateHandle
 import co.imprint.sdk.presentation.ApplicationViewModel
-import org.koin.core.module.dsl.viewModelOf
+import org.koin.core.module.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val viewModelModule = module {
-  viewModelOf(::ApplicationViewModel)
+  viewModel { (state: SavedStateHandle) ->
+    ApplicationViewModel(ioDispatcher = get(named("IoDispatcher")), state = state)
+  }
 }
