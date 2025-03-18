@@ -10,6 +10,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 
 internal class ApplicationActivity : ComponentActivity() {
 
@@ -35,5 +36,10 @@ internal class ApplicationActivity : ComponentActivity() {
         ApplicationView(viewModel)
       }
     }
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    stopKoin()
   }
 }
