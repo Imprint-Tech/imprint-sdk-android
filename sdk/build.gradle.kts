@@ -4,8 +4,6 @@ plugins {
   id("maven-publish")
   alias(libs.plugins.jetbrains.kotlin.android)
   alias(libs.plugins.compose.compiler)
-//  alias(libs.plugins.ksp)
-//  alias(libs.plugins.hilt.android.plugin)
 }
 
 android {
@@ -73,7 +71,7 @@ dependencies {
   implementation(libs.androidx.lifecycle.viewmodel.compose)
   implementation(libs.androidx.activity.compose)
 
-  //Hilt
+  //Koin
   implementation(libs.koin.android)
 
   // Optional: For testing Compose UI
