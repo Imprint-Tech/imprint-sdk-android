@@ -81,4 +81,5 @@ dependencies {
   testImplementation(libs.kotlinx.coroutines.test)
   testImplementation(libs.androidx.core.testing)
   testImplementation(libs.mockk)
+  testImplementation (libs.koin.test.junit4)
 }
