@@ -2,9 +2,10 @@ package co.imprint.sdkdemo
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import co.imprint.sdk.api.CompletionState
 import co.imprint.sdk.Imprint
-import co.imprint.sdk.api.ImprintConfiguration
+import co.imprint.sdk.domain.model.ImprintCompletionState
+import co.imprint.sdk.domain.model.ImprintConfiguration
+import co.imprint.sdk.domain.model.ImprintEnvironment
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -35,9 +36,9 @@ class MainViewModel : ViewModel() {
 
   fun startApplication(context: Context) {
     val environment = when (_selectedEnvironment.value) {
-      Environment.STAGING -> ImprintConfiguration.Environment.STAGING
-      Environment.SANDBOX -> ImprintConfiguration.Environment.SANDBOX
-      Environment.PRODUCTION -> ImprintConfiguration.Environment.PRODUCTION
+      Environment.STAGING -> ImprintEnvironment.STAGING
+      Environment.SANDBOX -> ImprintEnvironment.SANDBOX
+      Environment.PRODUCTION -> ImprintEnvironment.PRODUCTION
     }
 
     // Configure the Imprint SDK with the required parameters
@@ -49,19 +50,22 @@ class MainViewModel : ViewModel() {
 
     // Callback function triggered when the application process is completed
     val onCompletion =
-      { state: CompletionState, metadata: Map<String, String?>? ->
+      { state: ImprintCompletionState, metadata: Map<String, String?>? ->
         val metadataInfo = metadata?.toString() ?: "No metadata"
         val resultText = when (state) {
-          CompletionState.OFFER_ACCEPTED -> {
+          ImprintCompletionState.OFFER_ACCEPTED -> {
             "Offer accepted\n$metadataInfo"
           }
-          CompletionState.REJECTED -> {
+
+          ImprintCompletionState.REJECTED -> {
             "Application rejected\n$metadataInfo"
           }
-          CompletionState.ABANDONED -> {
+
+          ImprintCompletionState.ABANDONED -> {
             "Application abandoned"
           }
-          CompletionState.ERROR -> {
+
+          ImprintCompletionState.ERROR -> {
             "Error occurred"
           }
         }

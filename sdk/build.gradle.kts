@@ -12,8 +12,6 @@ android {
 
   defaultConfig {
     minSdk = 26
-    targetSdk = 35
-
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
 
@@ -71,8 +69,10 @@ dependencies {
 
   // Lifecycle dependency for view models in Compose
   implementation(libs.androidx.lifecycle.viewmodel.compose)
-
   implementation(libs.androidx.activity.compose)
+
+  //Koin
+  implementation(libs.koin.android)
 
   // Optional: For testing Compose UI
   androidTestImplementation(libs.androidx.ui.test.junit4)

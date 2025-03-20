@@ -1,5 +1,6 @@
 [versions]
-agp = "8.5.2"
+agp = "8.7.3"
+koinAndroid = "4.0.2"
 kotlin = "2.1.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -18,7 +19,7 @@ activityCompose = "1.10.1"
 lifecycleRuntimeKtxVersion = "2.8.7"
 composeBom = "2025.03.00"
 kotlinBom = "2.1.0"
-imprintSDK = "add-demo-app-SNAPSHOT"
+imprintSDK = "SPND-1161-adr-perform-code-enhancements-to-the-sdk-codebase-2-SNAPSHOT"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -28,6 +29,7 @@ androidx-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedat
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
 androidx-ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
@@ -40,7 +42,7 @@ androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", versi
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 kotlin-bom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlinBom" }
-imprint-sdk = { group = "com.github.Imprint-Tech", name = "imprint-sdk-android", version.ref = "imprintSDK"}
+imprint-sdk = { group = "com.github.Imprint-Tech", name = "imprint-sdk-android", version.ref = "imprintSDK" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

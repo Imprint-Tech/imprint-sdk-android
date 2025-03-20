@@ -1,13 +1,15 @@
-package co.imprint.sdk.viewmodel
+package co.imprint.sdk.presentation
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import co.imprint.sdk.api.CompletionState
-import co.imprint.sdk.callback.ImprintCallbackHolder
-import co.imprint.sdk.api.ImprintConfiguration
-import kotlinx.coroutines.Dispatchers
+import co.imprint.sdk.di.IsolatedKoinComponent
+import co.imprint.sdk.domain.ImprintCallbackHolder
+import co.imprint.sdk.domain.model.ImprintCompletionState
+import co.imprint.sdk.domain.model.ImprintConfiguration
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,26 +18,29 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-internal class ApplicationViewModel(private val configuration: ImprintConfiguration) : ViewModel() {
-  private val host = when (configuration.environment) {
-    ImprintConfiguration.Environment.STAGING -> "https://apply.stg.imprintapi.co"
-    ImprintConfiguration.Environment.SANDBOX -> "https://apply.sbx.imprint.co"
-    ImprintConfiguration.Environment.PRODUCTION -> "https://apply.imprint.co"
-  }
-  val webUrl = "$host/start?client_secret=${configuration.clientSecret}&partner_reference=${configuration.partnerReference}"
+internal class ApplicationViewModel(
+  private val ioDispatcher: CoroutineDispatcher,
+  state: SavedStateHandle,
+) : ViewModel(), IsolatedKoinComponent {
+
+  private val configuration: ImprintConfiguration =
+    state[ApplicationActivity.APPLICATION_CONFIGURATION]
+      ?: throw IllegalStateException("Imprint configuration is required to initialize the SDK")
+
+  val webUrl: String = configuration.webUrl
 
   private val _logoBitmap = MutableStateFlow<Bitmap?>(null)
   val logoBitmap: StateFlow<Bitmap?> = _logoBitmap.asStateFlow()
 
-  private var completionState: CompletionState = CompletionState.ABANDONED
+  private var completionState: ImprintCompletionState = ImprintCompletionState.ABANDONED
   private var completionData: Map<String, String?>? = null
 
   fun updateLogoUrl(url: String) {
-   loadImageBitmap(url = url)
+    loadImageBitmap(url = url)
   }
 
   fun updateCompletionState(
-    state: CompletionState,
+    state: ImprintCompletionState,
     data: Map<String, String?>?,
   ) {
     completionState = state
@@ -48,7 +53,7 @@ internal class ApplicationViewModel(private val configuration: ImprintConfigurat
   }
 
   private fun loadImageBitmap(url: String) {
-    viewModelScope.launch(Dispatchers.IO) {
+    viewModelScope.launch(ioDispatcher) {
       try {
         val connection = URL(url).openConnection() as HttpURLConnection
         connection.doInput = true
