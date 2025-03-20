@@ -35,7 +35,7 @@ Define the completion handler `onCompletion` to manage the terminal states whe
 
 ```Kotlin
 val onCompletion =
-      { state: CompletionState, metadata: Map<String, String?>? ->
+      { state: ImprintCompletionState, metadata: Map<String, String?>? ->
         val metadataInfo = metadata?.toString() ?: "No metadata"
         val result = when (state) {
           ImprintCompletionState.OFFER_ACCEPTED -> {
