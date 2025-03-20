@@ -26,7 +26,7 @@ Create an instance of `ImprintConfiguration` with your `clientSecret`, `partnerR
 val configuration = ImprintConfiguration(
   clientSecret = "client_secret",
   partnerReference: "partner_reference",
-  environment = ImprintConfiguration.Environment.SANDBOX,
+  environment = ImprintEnvironment.SANDBOX,
 )
 ```
 
@@ -38,16 +38,16 @@ val onCompletion =
       { state: CompletionState, metadata: Map<String, String?>? ->
         val metadataInfo = metadata?.toString() ?: "No metadata"
         val result = when (state) {
-          CompletionState.OFFER_ACCEPTED -> {
+          ImprintCompletionState.OFFER_ACCEPTED -> {
             "Offer accepted\n$metadataInfo"
           }
-          CompletionState.REJECTED -> {
+          ImprintCompletionState.REJECTED -> {
             "Application rejected\n$metadataInfo"
           }
-          CompletionState.ABANDONED -> {
+          ImprintCompletionState.ABANDONED -> {
             "Application abandoned"
           }
-          CompletionState.ERROR -> {
+          ImprintCompletionState.ERROR -> {
             "Error occured\n$metadataInfo"
           }
         }
@@ -62,7 +62,7 @@ Once you have configured the `ImprintConfiguration`, initiate the application f
 fun startApplication(
     context: Context,
     configuration: ImprintConfiguration,
-    onCompletion: (CompletionState, Map<String, String?>?) -> Unit,
+    onCompletion: (ImprintCompletionState, Map<String, String?>?) -> Unit,
   )
 ```
 
