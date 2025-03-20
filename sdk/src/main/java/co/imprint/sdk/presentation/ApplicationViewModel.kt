@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import co.imprint.sdk.di.IsolatedKoinComponent
 import co.imprint.sdk.domain.ImprintCallbackHolder
 import co.imprint.sdk.domain.model.ImprintCompletionState
 import co.imprint.sdk.domain.model.ImprintConfiguration
@@ -20,7 +21,7 @@ import java.net.URL
 internal class ApplicationViewModel(
   private val ioDispatcher: CoroutineDispatcher,
   state: SavedStateHandle,
-) : ViewModel() {
+) : ViewModel(), IsolatedKoinComponent {
 
   private val configuration: ImprintConfiguration =
     state[ApplicationActivity.APPLICATION_CONFIGURATION]

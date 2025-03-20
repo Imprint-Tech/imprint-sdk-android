@@ -1,4 +1,4 @@
-package co.imprint.sdk.di
+package co.imprint.sdk.di.modules
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
