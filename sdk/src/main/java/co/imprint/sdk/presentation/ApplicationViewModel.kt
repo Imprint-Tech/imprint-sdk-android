@@ -1,7 +1,6 @@
 package co.imprint.sdk.presentation
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,17 +8,14 @@ import co.imprint.sdk.di.IsolatedKoinComponent
 import co.imprint.sdk.domain.ImprintCallbackHolder
 import co.imprint.sdk.domain.model.ImprintCompletionState
 import co.imprint.sdk.domain.model.ImprintConfiguration
-import kotlinx.coroutines.CoroutineDispatcher
+import co.imprint.sdk.domain.repository.ImageRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.io.InputStream
-import java.net.HttpURLConnection
-import java.net.URL
 
 internal class ApplicationViewModel(
-  private val ioDispatcher: CoroutineDispatcher,
+  private val imageRepository: ImageRepository,
   state: SavedStateHandle,
 ) : ViewModel(), IsolatedKoinComponent {
 
@@ -52,19 +48,14 @@ internal class ApplicationViewModel(
     onCompletion?.invoke(completionState, completionData)
   }
 
-  private fun loadImageBitmap(url: String) {
-    viewModelScope.launch(ioDispatcher) {
-      try {
-        val connection = URL(url).openConnection() as HttpURLConnection
-        connection.doInput = true
-        connection.connect()
-        val inputStream: InputStream = connection.inputStream
-        val loadedBitmap = BitmapFactory.decodeStream(inputStream)
-        _logoBitmap.value = loadedBitmap
-      } catch (e: Exception) {
-        e.printStackTrace()
-        _logoBitmap.value = null
-      }
+  private fun loadImageBitmap(url: String) = viewModelScope.launch {
+    runCatching {
+      imageRepository.getImageBitmap(url)
+    }.onSuccess { image ->
+      _logoBitmap.value = image
+    }.onFailure {
+      it.printStackTrace()
+      _logoBitmap.value = null
     }
   }
 }

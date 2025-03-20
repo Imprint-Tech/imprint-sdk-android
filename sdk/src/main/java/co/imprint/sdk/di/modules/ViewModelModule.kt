@@ -8,6 +8,9 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
   viewModel { (state: SavedStateHandle) ->
-    ApplicationViewModel(ioDispatcher = get(named("IoDispatcher")), state = state)
+    ApplicationViewModel(
+      imageRepository = get(),
+      state = state
+    )
   }
 }

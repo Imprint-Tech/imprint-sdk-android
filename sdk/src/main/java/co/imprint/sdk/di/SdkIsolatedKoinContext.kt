@@ -1,7 +1,8 @@
 package co.imprint.sdk.di
 
-import co.imprint.sdk.di.modules.dispatchersModule
-import co.imprint.sdk.di.modules.viewModelsModule
+import co.imprint.sdk.di.modules.dispatcherModule
+import co.imprint.sdk.di.modules.repositoryModule
+import co.imprint.sdk.di.modules.viewModelModule
 import org.koin.dsl.koinApplication
 
 /**
@@ -16,9 +17,8 @@ import org.koin.dsl.koinApplication
 internal object SdkIsolatedKoinContext {
 
   private val koinApp = koinApplication {
-
     // declare used modules
-    modules(dispatchersModule, viewModelsModule)
+    modules(dispatcherModule, viewModelModule, repositoryModule)
   }
 
   val koin = koinApp.koin
