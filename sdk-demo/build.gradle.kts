@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.jetbrains.kotlin.android)
@@ -63,4 +61,6 @@ dependencies {
   implementation(libs.androidx.lifecycle.viewmodel.compose)
   implementation(libs.androidx.ui.tooling.preview)
   implementation(libs.imprint.sdk)
+  //Koin
+  implementation(libs.koin.android)
 }
