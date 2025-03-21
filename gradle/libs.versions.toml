@@ -20,6 +20,7 @@ lifecycleRuntimeKtxVersion = "2.8.7"
 composeBom = "2025.03.00"
 kotlinBom = "2.1.0"
 imprintSDK = "SPND-1161-adr-perform-code-enhancements-to-the-sdk-codebase-2-SNAPSHOT"
+mavenPublish = "0.31.0-rc2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -48,4 +49,5 @@ imprint-sdk = { group = "com.github.Imprint-Tech", name = "imprint-sdk-android",
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublish" }
 
