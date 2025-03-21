@@ -77,4 +77,9 @@ dependencies {
   // Optional: For testing Compose UI
   androidTestImplementation(libs.androidx.ui.test.junit4)
   debugImplementation(libs.androidx.ui.tooling)
+  testImplementation(libs.json)
+  testImplementation(libs.kotlinx.coroutines.test)
+  testImplementation(libs.androidx.core.testing)
+  testImplementation(libs.mockk)
+  testImplementation (libs.koin.test.junit4)
 }
