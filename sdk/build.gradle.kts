@@ -1,9 +1,9 @@
+import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
 import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
   id("com.android.library")
   id("kotlin-parcelize")
-  id("maven-publish")
   alias(libs.plugins.jetbrains.kotlin.android)
   alias(libs.plugins.compose.compiler)
   alias(libs.plugins.maven.publish)
@@ -34,29 +34,18 @@ android {
   kotlinOptions {
     jvmTarget = "1.8"
   }
-
-  publishing {
-    singleVariant("release") {
-      withSourcesJar()
-    }
-  }
-}
-
-publishing {
-  publications {
-    create<MavenPublication>("release") {
-      groupId = "co.imprint.sdk"
-      artifactId = "imprint-sdk"
-      version = "0.2.0"
-
-      afterEvaluate {
-        from(components["release"])
-      }
-    }
-  }
 }
 
 mavenPublishing {
+  configure(AndroidSingleVariantLibrary(
+    // the published variant
+    variant = "release",
+    // whether to publish a sources jar
+    sourcesJar = true,
+    // whether to publish a javadoc jar
+    publishJavadocJar = true,
+  ))
+
   publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
   signAllPublications()
 
