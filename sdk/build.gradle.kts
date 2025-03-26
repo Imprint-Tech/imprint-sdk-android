@@ -46,10 +46,10 @@ mavenPublishing {
     publishJavadocJar = true,
   ))
 
-  publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+  publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = false)
   signAllPublications()
 
-  coordinates("co.imprint.sdk", "imprint-sdk", "0.2.0-SNAPSHOT")
+  coordinates("co.imprint.sdk", "imprint-sdk", "0.2.0")
 
   pom {
     name.set("Imprint Android SDK")
