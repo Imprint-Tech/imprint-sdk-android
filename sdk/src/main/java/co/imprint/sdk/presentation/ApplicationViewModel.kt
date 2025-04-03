@@ -8,6 +8,8 @@ import co.imprint.sdk.di.IsolatedKoinComponent
 import co.imprint.sdk.domain.ImprintCallbackHolder
 import co.imprint.sdk.domain.model.ImprintCompletionState
 import co.imprint.sdk.domain.model.ImprintConfiguration
+import co.imprint.sdk.domain.model.ImprintProcessState
+import co.imprint.sdk.domain.model.toCompletionState
 import co.imprint.sdk.domain.repository.ImageRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,7 +30,8 @@ internal class ApplicationViewModel(
   private val _logoBitmap = MutableStateFlow<Bitmap?>(null)
   val logoBitmap: StateFlow<Bitmap?> = _logoBitmap.asStateFlow()
 
-  private var completionState: ImprintCompletionState = ImprintCompletionState.ABANDONED
+  private var completionState: ImprintCompletionState = ImprintCompletionState.IN_PROGRESS
+  private var processState: ImprintProcessState = ImprintProcessState.ABANDONED
   private var completionData: Map<String, String?>? = null
 
   fun updateLogoUrl(url: String) {
@@ -36,14 +39,15 @@ internal class ApplicationViewModel(
   }
 
   fun updateCompletionState(
-    state: ImprintCompletionState,
+    state: ImprintProcessState,
     data: Map<String, String?>?,
   ) {
-    completionState = state
+    processState = state
     completionData = data
   }
 
   fun onDismiss() {
+    completionState = processState.toCompletionState()
     val onCompletion = ImprintCallbackHolder.onApplicationCompletion
     onCompletion?.invoke(completionState, completionData)
   }

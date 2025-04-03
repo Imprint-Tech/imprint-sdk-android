@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import co.imprint.sdk.domain.model.ImprintCompletionState
+import co.imprint.sdk.domain.model.ImprintProcessState
 import co.imprint.sdk.presentation.utils.toMapOrNull
 import co.imprint.sdk.presentation.ApplicationViewModel
 import org.json.JSONObject
@@ -50,7 +50,7 @@ internal fun WebViewWrapper(
                 viewModel.updateLogoUrl(url = logoURL)
 
                 val completionData = dataJson.toMapOrNull()
-                val state = ImprintCompletionState.fromString(eventName)
+                val state = ImprintProcessState.fromString(eventName)
                 viewModel.updateCompletionState(state, completionData)
               } catch (e: Exception) {
                 Log.e("WebViewWrapper", "onMessage: Error parsing data from Web view")
