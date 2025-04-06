@@ -8,13 +8,16 @@ import co.imprint.sdk.di.IsolatedKoinComponent
 import co.imprint.sdk.domain.ImprintCallbackHolder
 import co.imprint.sdk.domain.model.ImprintCompletionState
 import co.imprint.sdk.domain.model.ImprintConfiguration
+import co.imprint.sdk.domain.model.ImprintErrorCode
 import co.imprint.sdk.domain.model.ImprintProcessState
 import co.imprint.sdk.domain.model.toCompletionState
 import co.imprint.sdk.domain.repository.ImageRepository
+import co.imprint.sdk.presentation.utils.toMap
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 internal class ApplicationViewModel(
   private val imageRepository: ImageRepository,
@@ -32,18 +35,10 @@ internal class ApplicationViewModel(
 
   private var completionState: ImprintCompletionState = ImprintCompletionState.IN_PROGRESS
   private var processState: ImprintProcessState = ImprintProcessState.ABANDONED
-  private var completionData: Map<String, String?>? = null
+  private var completionData: Map<String, Any?>? = null
 
   fun updateLogoUrl(url: String) {
     loadImageBitmap(url = url)
-  }
-
-  fun updateCompletionState(
-    state: ImprintProcessState,
-    data: Map<String, String?>?,
-  ) {
-    processState = state
-    completionData = data
   }
 
   fun onDismiss() {
@@ -60,6 +55,24 @@ internal class ApplicationViewModel(
     }.onFailure {
       it.printStackTrace()
       _logoBitmap.value = null
+    }
+  }
+
+  fun processEventData(eventData: JSONObject?) {
+    eventData?.let {
+      val logoURL = eventData.optString(Constants.LOGO_URL)
+      updateLogoUrl(url = logoURL)
+
+      val resultMap = it.toMap()
+
+      val eventName = eventData.optString(Constants.EVENT_NAME)
+      processState = ImprintProcessState.fromString(eventName)
+
+      if (processState == ImprintProcessState.ERROR) {
+        val errorCode = eventData.optString(Constants.ERROR_CODE)
+        resultMap["error_code"] = ImprintErrorCode.fromString(errorCode)
+      }
+      completionData = resultMap
     }
   }
 }
