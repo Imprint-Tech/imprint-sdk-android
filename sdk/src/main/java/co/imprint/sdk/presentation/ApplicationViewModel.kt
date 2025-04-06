@@ -36,7 +36,7 @@ internal class ApplicationViewModel(
 
   private var completionState: ImprintCompletionState = ImprintCompletionState.IN_PROGRESS
   @VisibleForTesting
-  private var processState: ImprintProcessState = ImprintProcessState.ABANDONED
+  private var processState: ImprintProcessState = ImprintProcessState.CUSTOMER_CLOSED
   @VisibleForTesting
   private var completionData: Map<String, Any?>? = null
 

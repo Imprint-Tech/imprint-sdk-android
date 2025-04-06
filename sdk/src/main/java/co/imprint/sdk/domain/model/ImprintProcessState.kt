@@ -5,19 +5,18 @@ enum class ImprintProcessState {
   APPLICATION_STARTED,
   OFFER_PRESENTED,
   OFFER_ACCEPTED,
-  OFFER_DECLINED,
   REJECTED,
   APPLICATION_REVIEW,
   CREDIT_FROZEN,
-  ABANDONED,
+  CUSTOMER_CLOSED,
   ERROR;
 
   companion object {
     fun fromString(value: String?): ImprintProcessState {
       return try {
-        value?.let { enumValueOf<ImprintProcessState>(it) } ?: ABANDONED
+        value?.let { enumValueOf<ImprintProcessState>(it) } ?: CUSTOMER_CLOSED
       } catch (e: IllegalArgumentException) {
-        ABANDONED
+        CUSTOMER_CLOSED
       }
     }
   }
