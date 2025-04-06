@@ -1,6 +1,7 @@
 package co.imprint.sdk.presentation
 
 import android.graphics.Bitmap
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -34,7 +35,9 @@ internal class ApplicationViewModel(
   val logoBitmap: StateFlow<Bitmap?> = _logoBitmap.asStateFlow()
 
   private var completionState: ImprintCompletionState = ImprintCompletionState.IN_PROGRESS
+  @VisibleForTesting
   private var processState: ImprintProcessState = ImprintProcessState.ABANDONED
+  @VisibleForTesting
   private var completionData: Map<String, Any?>? = null
 
   fun updateLogoUrl(url: String) {
@@ -66,12 +69,14 @@ internal class ApplicationViewModel(
       val resultMap = it.toMap()
 
       val eventName = eventData.optString(Constants.EVENT_NAME)
-      processState = ImprintProcessState.fromString(eventName)
+      val state = ImprintProcessState.fromString(eventName)
 
-      if (processState == ImprintProcessState.ERROR) {
+      if (state == ImprintProcessState.ERROR) {
         val errorCode = eventData.optString(Constants.ERROR_CODE)
         resultMap["error_code"] = ImprintErrorCode.fromString(errorCode)
       }
+
+      processState = state
       completionData = resultMap
     }
   }

@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import co.imprint.sdk.domain.model.ImprintProcessState
-import co.imprint.sdk.presentation.utils.toMapOrNull
 import co.imprint.sdk.presentation.ApplicationViewModel
 import co.imprint.sdk.presentation.Constants
 import org.json.JSONObject
