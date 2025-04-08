@@ -50,7 +50,7 @@ class MainViewModel : ViewModel() {
 
     // Callback function triggered when the application process is completed
     val onCompletion =
-      { state: ImprintCompletionState, metadata: Map<String, String?>? ->
+      { state: ImprintCompletionState, metadata: Map<String, Any?>? ->
         val metadataInfo = metadata?.toString() ?: "No metadata"
         val resultText = when (state) {
           ImprintCompletionState.OFFER_ACCEPTED -> {
@@ -61,7 +61,7 @@ class MainViewModel : ViewModel() {
             "Application rejected\n$metadataInfo"
           }
 
-          ImprintCompletionState.ABANDONED -> {
+          ImprintCompletionState.IN_PROGRESS -> {
             "Application abandoned"
           }
 

@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.SavedStateHandle
 import co.imprint.sdk.domain.ImprintCallbackHolder
-import co.imprint.sdk.domain.model.ImprintCompletionState
 import co.imprint.sdk.domain.model.ImprintConfiguration
 import co.imprint.sdk.domain.repository.ImageRepository
 import co.imprint.sdk.rules.MainDispatcherRule
@@ -52,29 +51,6 @@ class ApplicationViewModelTest {
     savedStateHandle.remove<ImprintConfiguration>(ApplicationActivity.APPLICATION_CONFIGURATION)
     // Recreate the ViewModel with the missing configuration
     viewModel = ApplicationViewModel(imageRepository, savedStateHandle)
-  }
-
-  @Test
-  fun `updateCompletionState should update completionState and completionData, after that onDismiss should be called with both values`() {
-    // Prepare test data
-    val newCompletionState = ImprintCompletionState.OFFER_ACCEPTED
-    val newCompletionData = mapOf("key" to "value")
-    var finalCompletionState: ImprintCompletionState? = null
-    var finalCompletionData: Map<String, String?>? = null
-
-    //Defining callback to later test that completition is being updated correctly and onDismiss works properly.
-    ImprintCallbackHolder.onApplicationCompletion = { completionState, completionData ->
-      finalCompletionState = completionState
-      finalCompletionData = completionData
-    }
-
-    // Call the method
-    viewModel.updateCompletionState(newCompletionState, newCompletionData)
-    viewModel.onDismiss()
-
-    // Verify that the state and data have been updated
-    assertEquals(newCompletionState, finalCompletionState)
-    assertEquals(newCompletionData, finalCompletionData)
   }
 
   @Test

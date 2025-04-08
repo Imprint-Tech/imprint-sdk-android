@@ -9,6 +9,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 internal class ApplicationActivity : ComponentActivity(), IsolatedKoinComponent {
 
+  private val viewModel: ApplicationViewModel by viewModel()
+
   companion object {
     const val APPLICATION_CONFIGURATION = "config"
   }
@@ -16,7 +18,6 @@ internal class ApplicationActivity : ComponentActivity(), IsolatedKoinComponent 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    val viewModel: ApplicationViewModel by viewModel()
     setContent {
       MaterialTheme {
         ApplicationView(viewModel)

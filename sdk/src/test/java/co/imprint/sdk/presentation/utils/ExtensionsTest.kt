@@ -8,16 +8,10 @@ import org.junit.Test
 class ExtensionsTest {
 
   @Test
-  fun `toMapOrNull should return null when JSONObject is null`() {
-    val jsonObject: JSONObject? = null
-    assertNull(jsonObject.toMapOrNull())
-  }
-
-  @Test
   fun `toMapOrNull should return empty map when JSONObject is empty`() {
     val jsonObject = JSONObject()
-    val result = jsonObject.toMapOrNull()
-    assertEquals(emptyMap<String, String?>(), result)
+    val result = jsonObject.toMap()
+    assertEquals(emptyMap<String, Any?>(), result)
   }
 
   @Test
@@ -32,7 +26,7 @@ class ExtensionsTest {
       "key2" to "value2"
     )
 
-    val result = jsonObject.toMapOrNull()
+    val result = jsonObject.toMap()
     assertEquals(expectedMap, result)
   }
 
@@ -48,7 +42,7 @@ class ExtensionsTest {
       "key2" to "value2"
     )
 
-    val result = jsonObject.toMapOrNull()
+    val result = jsonObject.toMap()
     assertEquals(expectedMap, result)
   }
 
