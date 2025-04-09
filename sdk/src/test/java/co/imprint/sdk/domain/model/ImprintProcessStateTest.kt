@@ -19,6 +19,7 @@ class ImprintStateTests {
     assertEquals(ImprintCompletionState.IN_PROGRESS, ImprintProcessState.APPLICATION_REVIEW.toCompletionState())
     assertEquals(ImprintCompletionState.IN_PROGRESS, ImprintProcessState.CREDIT_FROZEN.toCompletionState())
     assertEquals(ImprintCompletionState.IN_PROGRESS, ImprintProcessState.CUSTOMER_CLOSED.toCompletionState())
+    assertEquals(ImprintCompletionState.IN_PROGRESS, ImprintProcessState.IMPRINT_CLOSED.toCompletionState())
   }
 
   @Test
@@ -32,6 +33,7 @@ class ImprintStateTests {
     assertEquals(ImprintProcessState.APPLICATION_REVIEW, ImprintProcessState.fromString("APPLICATION_REVIEW"))
     assertEquals(ImprintProcessState.CREDIT_FROZEN, ImprintProcessState.fromString("CREDIT_FROZEN"))
     assertEquals(ImprintProcessState.CUSTOMER_CLOSED, ImprintProcessState.fromString("CUSTOMER_CLOSED"))
+    assertEquals(ImprintProcessState.IMPRINT_CLOSED, ImprintProcessState.fromString("IMPRINT_CLOSED"))
     assertEquals(ImprintProcessState.ERROR, ImprintProcessState.fromString("ERROR"))
   }
 

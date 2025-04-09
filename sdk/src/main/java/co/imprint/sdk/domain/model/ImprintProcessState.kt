@@ -9,6 +9,7 @@ enum class ImprintProcessState {
   APPLICATION_REVIEW,
   CREDIT_FROZEN,
   CUSTOMER_CLOSED,
+  IMPRINT_CLOSED,
   ERROR;
 
   companion object {
