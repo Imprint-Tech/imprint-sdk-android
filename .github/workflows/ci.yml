@@ -66,7 +66,7 @@ jobs:
       - name: Build Demo App
         run: |
           set +x
-          ./gradlew :sdkdemo:clean :sdkdemo:assembleDebug | grep -v "sensitive"
+          ./gradlew :sdk-demo:clean :sdk-demo:assembleDebug | grep -v "sensitive"
 
       # Test JitPack/Maven integration
       - name: Validate Maven Publication
