@@ -1,9 +1,6 @@
 name: Release Android SDK to Maven Central
 
 on:
-  push:
-    branches:
-      - "SPND-1183"
   workflow_dispatch:
     inputs:
       version:
