@@ -36,8 +36,12 @@ android {
   }
 }
 
-val sdkVersion = project.findProperty("SDK_VERSION") as String? ?:
-    throw GradleException("SDK_VERSION is required! Pass -PSDK_VERSION=YOUR_VERSION")
+val isCi = System.getenv("CI") == "true"
+val sdkVersion = project.findProperty("SDK_VERSION") as String? ?: if (isCi) {
+  "0.0.1-SNAPSHOT" // allow safe dummy version in CI builds
+} else {
+  throw GradleException("SDK_VERSION is required! Pass -PSDK_VERSION=YOUR_VERSION")
+}
 
 mavenPublishing {
   configure(AndroidSingleVariantLibrary(
