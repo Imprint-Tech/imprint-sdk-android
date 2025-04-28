@@ -30,8 +30,8 @@ jobs:
         run: |
           echo "Checking version format..."
           if [[ ! "${{ github.event.inputs.version }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-          echo "ERROR: Version must match format X.Y.Z (e.g., 1.2.3)"
-          exit 1
+            echo "ERROR: Version must match format X.Y.Z (e.g., 1.2.3)"
+            exit 1
           fi
 
       - name: Make Gradle Wrapper executable
@@ -63,9 +63,9 @@ jobs:
           echo "Previous tag: $previous_tag"
             
           if [ -z "$previous_tag" ]; then
-          commit_range=""
+            commit_range=""
           else
-          commit_range="$previous_tag..HEAD"
+            commit_range="$previous_tag..HEAD"
           fi
             
           echo "## ✨ Features" > CHANGELOG.txt
