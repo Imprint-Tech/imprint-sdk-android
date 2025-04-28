@@ -36,6 +36,9 @@ android {
   }
 }
 
+val sdkVersion = project.findProperty("SDK_VERSION") as String? ?:
+    throw GradleException("SDK_VERSION is required! Pass -PSDK_VERSION=YOUR_VERSION")
+
 mavenPublishing {
   configure(AndroidSingleVariantLibrary(
     // the published variant
@@ -49,7 +52,7 @@ mavenPublishing {
   publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = false)
   signAllPublications()
 
-  coordinates("co.imprint.sdk", "imprint-sdk", "0.2.0")
+  coordinates("co.imprint.sdk", "imprint-sdk", sdkVersion)
 
   pom {
     name.set("Imprint Android SDK")
