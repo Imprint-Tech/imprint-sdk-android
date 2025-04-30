@@ -64,8 +64,10 @@ jobs:
           echo "Previous tag: $previous_tag"
 
           if [ -z "$previous_tag" ]; then
+            echo "No previous tag found. Including all commits."
             commit_range=""
           else
+            echo "Using commit range from $previous_tag to HEAD."
             commit_range="$previous_tag..HEAD"
           fi
 
