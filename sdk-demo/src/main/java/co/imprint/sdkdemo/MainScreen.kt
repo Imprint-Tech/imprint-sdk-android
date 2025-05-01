@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun MainScreen(viewModel: MainViewModel = viewModel()) {
   val clientSecret by viewModel.clientSecret.collectAsState()
-  val partnerReference by viewModel.partnerReference.collectAsState()
   val selectedEnvironment by viewModel.selectedEnvironment.collectAsState()
   val completionState by viewModel.completionState.collectAsState()
   val context = LocalContext.current
@@ -34,15 +33,6 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
       value = clientSecret,
       onValueChange = viewModel::updateClientSecret,
       maxLines = 6
-    )
-
-    Spacer(modifier = Modifier.height(16.dp))
-
-    InputField(
-      label = "Partner Reference:",
-      value = partnerReference,
-      onValueChange = viewModel::updatePartnerReference,
-      maxLines = 3
     )
 
     Spacer(modifier = Modifier.height(16.dp))
