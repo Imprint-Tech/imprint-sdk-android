@@ -41,12 +41,13 @@ jobs:
         run: ./gradlew clean build test
 
       - name: Publish to Maven Central
-        run: ./gradlew publishToMavenLocal -PSDK_VERSION=${{ github.event.inputs.version }}
+        run: ./gradlew publishAllPublicationsToMavenCentralRepository -PSDK_VERSION=${{ github.event.inputs.version }}
         env:
-          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.ORG_GRADLE_PROJECT_signingKey }}
-          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.ORG_GRADLE_PROJECT_signingPassword }}
-          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.ORG_GRADLE_PROJECT_sonatypeUsername }}
-          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.ORG_GRADLE_PROJECT_sonatypePassword }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGINMEMORYKEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGINMEMORYKEYID }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGINMEMORYKEYPASSWORD }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.ORG_GRADLE_PROJECT_MAVENCENTRALUSERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.ORG_GRADLE_PROJECT_MAVENCENTRALPASSWORD }}
 
       - name: Tag the release
         run: |
@@ -61,25 +62,27 @@ jobs:
         run: |
           previous_tag=$(git tag --sort=-creatordate | grep '^v' | grep -v "${{ github.event.inputs.version }}" | head -n 1)
           echo "Previous tag: $previous_tag"
-            
+
           if [ -z "$previous_tag" ]; then
+            echo "No previous tag found. Including all commits."
             commit_range=""
           else
+            echo "Using commit range from $previous_tag to HEAD."
             commit_range="$previous_tag..HEAD"
           fi
-            
+
           echo "## ✨ Features" > CHANGELOG.txt
-          git log $commit_range --grep='^feat:' --pretty=format:"- %s" >> CHANGELOG.txt || true
-            
+          git log $commit_range --grep="(FEAT)" --pretty=format:"- %s" | sed 's/(FEAT) //' >> CHANGELOG.txt || true
+
           echo -e "\n## 🐛 Bug Fixes" >> CHANGELOG.txt
-          git log $commit_range --grep='^fix:' --pretty=format:"- %s" >> CHANGELOG.txt || true
-            
-          echo -e "\n## 📝 Documentation" >> CHANGELOG.txt
-          git log $commit_range --grep='^docs:' --pretty=format:"- %s" >> CHANGELOG.txt || true
-            
-          echo -e "\n## 🔧 Other Changes" >> CHANGELOG.txt
-          git log $commit_range --invert-grep --grep='^feat:\|^fix:\|^docs:' --pretty=format:"- %s" >> CHANGELOG.txt || true
-            
+          git log $commit_range --grep="(FIX)" --pretty=format:"- %s" | sed 's/(FIX) //' >> CHANGELOG.txt || true
+
+          echo -e "\n## 🔧 Improvements" >> CHANGELOG.txt
+          git log $commit_range --grep="(IMPR)" --pretty=format:"- %s" | sed 's/(IMPR) //' >> CHANGELOG.txt || true
+
+          echo -e "\n## 📝 Other Changes" >> CHANGELOG.txt
+          git log $commit_range --invert-grep --grep="(FEAT)\|(FIX)\|(IMPR)" --pretty=format:"- %s" >> CHANGELOG.txt || true
+
           cat CHANGELOG.txt
 
       - name: Create GitHub Release
