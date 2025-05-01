@@ -1,6 +1,7 @@
 package co.imprint.sdk.presentation
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -14,8 +15,10 @@ import co.imprint.sdk.domain.model.ImprintProcessState
 import co.imprint.sdk.domain.model.toCompletionState
 import co.imprint.sdk.domain.repository.ImageRepository
 import co.imprint.sdk.presentation.utils.toMap
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -40,6 +43,15 @@ internal class ApplicationViewModel(
   @VisibleForTesting
   private var completionData: Map<String, Any?>? = null
 
+  private val _navigationEvents = MutableSharedFlow<NavigationEvent>()
+  val navigationEvents = _navigationEvents.asSharedFlow()
+
+  fun finishActivity() {
+    viewModelScope.launch {
+      _navigationEvents.emit(NavigationEvent.Finish)
+    }
+  }
+
   fun updateLogoUrl(url: String) {
     loadImageBitmap(url = url)
   }
@@ -48,6 +60,7 @@ internal class ApplicationViewModel(
     completionState = processState.toCompletionState()
     val onCompletion = ImprintCallbackHolder.onApplicationCompletion
     onCompletion?.invoke(completionState, completionData)
+    finishActivity()
   }
 
   private fun loadImageBitmap(url: String) = viewModelScope.launch {
@@ -62,6 +75,7 @@ internal class ApplicationViewModel(
   }
 
   fun processEventData(eventData: JSONObject?) {
+    Log.d("TESTSDK", "processEventData: $eventData")
     eventData?.let {
       val logoURL = eventData.optString(Constants.LOGO_URL)
       updateLogoUrl(url = logoURL)
@@ -75,9 +89,17 @@ internal class ApplicationViewModel(
         val errorCode = eventData.optString(Constants.ERROR_CODE)
         resultMap["error_code"] = ImprintErrorCode.fromString(errorCode)
       }
-
-      processState = state
       completionData = resultMap
+
+      if (state == ImprintProcessState.IMPRINT_CLOSED || state == ImprintProcessState.CUSTOMER_CLOSED) {
+        onDismiss()
+      } else {
+        processState = state
+      }
     }
   }
+}
+
+sealed class NavigationEvent {
+  object Finish : NavigationEvent()
 }
