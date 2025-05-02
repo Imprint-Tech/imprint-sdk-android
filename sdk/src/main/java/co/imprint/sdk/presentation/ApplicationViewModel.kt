@@ -1,7 +1,6 @@
 package co.imprint.sdk.presentation
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -39,21 +38,23 @@ internal class ApplicationViewModel(
 
   private var completionState: ImprintCompletionState = ImprintCompletionState.IN_PROGRESS
   @VisibleForTesting
-  private var processState: ImprintProcessState = ImprintProcessState.CUSTOMER_CLOSED
+  private var processState: ImprintProcessState? = null
   @VisibleForTesting
   private var completionData: Map<String, Any?>? = null
 
   private val _navigationEvents = MutableSharedFlow<NavigationEvent>()
   val navigationEvents = _navigationEvents.asSharedFlow()
 
-  fun finishActivity() {
+  private fun finishActivity() {
     viewModelScope.launch {
       _navigationEvents.emit(NavigationEvent.Finish)
     }
   }
 
   fun updateLogoUrl(url: String) {
-    loadImageBitmap(url = url)
+    if (url.isNotEmpty()) {
+      loadImageBitmap(url = url)
+    }
   }
 
   fun onDismiss() {
@@ -75,7 +76,6 @@ internal class ApplicationViewModel(
   }
 
   fun processEventData(eventData: JSONObject?) {
-    Log.d("TESTSDK", "processEventData: $eventData")
     eventData?.let {
       val logoURL = eventData.optString(Constants.LOGO_URL)
       updateLogoUrl(url = logoURL)

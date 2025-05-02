@@ -32,7 +32,9 @@ internal class ApplicationActivity : ComponentActivity(), IsolatedKoinComponent 
       repeatOnLifecycle(Lifecycle.State.STARTED) {
         viewModel.navigationEvents.collect { event ->
           when (event) {
-            is NavigationEvent.Finish -> finish()
+            is NavigationEvent.Finish -> {
+              finish()
+            }
           }
         }
       }

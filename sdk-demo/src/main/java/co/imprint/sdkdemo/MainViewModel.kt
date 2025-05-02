@@ -54,11 +54,11 @@ class MainViewModel : ViewModel() {
           }
 
           ImprintCompletionState.IN_PROGRESS -> {
-            "Application abandoned"
+            "Application interrupted\n$metadataInfo"
           }
 
           ImprintCompletionState.ERROR -> {
-            "Error occurred"
+            "Error occurred\n$metadataInfo"
           }
         }
         _completionState.value = resultText
