@@ -27,16 +27,23 @@ internal fun AppBar(
   onDismiss: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  Row(
+  Box(
     modifier = modifier
       .fillMaxWidth()
       .height(56.dp)
       .padding(horizontal = 16.dp),
-    horizontalArrangement = Arrangement.SpaceBetween,
-    verticalAlignment = Alignment.CenterVertically,
   ) {
-    LogoImage(bitmap)
-    CloseButton(onDismiss)
+    Box(
+      modifier = Modifier.align(Alignment.Center)
+    ) {
+      LogoImage(bitmap)
+    }
+
+    Box(
+      modifier = Modifier.align(Alignment.CenterEnd)
+    ) {
+      CloseButton(onDismiss)
+    }
   }
 }
 

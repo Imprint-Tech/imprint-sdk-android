@@ -9,7 +9,6 @@ class ImprintErrorCodeTest {
   fun `fromString returns correct enum for valid error code strings`() {
     // Test each defined error code
     assertEquals(ImprintErrorCode.INVALID_CLIENT_SECRET, ImprintErrorCode.fromString("INVALID_CLIENT_SECRET"))
-    assertEquals(ImprintErrorCode.INVALID_PARTNER_REFERENCE, ImprintErrorCode.fromString("INVALID_PARTNER_REFERENCE"))
     assertEquals(ImprintErrorCode.NETWORK_CONNECTION_FAILED, ImprintErrorCode.fromString("NETWORK_CONNECTION_FAILED"))
     assertEquals(ImprintErrorCode.SERVER_ERROR, ImprintErrorCode.fromString("SERVER_ERROR"))
     assertEquals(ImprintErrorCode.TIMEOUT_ERROR, ImprintErrorCode.fromString("TIMEOUT_ERROR"))

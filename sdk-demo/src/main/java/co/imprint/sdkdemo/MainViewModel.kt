@@ -13,9 +13,6 @@ class MainViewModel : ViewModel() {
   private val _clientSecret = MutableStateFlow("")
   val clientSecret: StateFlow<String> = _clientSecret
 
-  private val _partnerReference = MutableStateFlow("")
-  val partnerReference: StateFlow<String> = _partnerReference
-
   private val _selectedEnvironment = MutableStateFlow(Environment.STAGING)
   val selectedEnvironment: StateFlow<Environment> = _selectedEnvironment
 
@@ -24,10 +21,6 @@ class MainViewModel : ViewModel() {
 
   fun updateClientSecret(value: String) {
     _clientSecret.value = value
-  }
-
-  fun updatePartnerReference(value: String) {
-    _partnerReference.value = value
   }
 
   fun selectEnvironment(environment: Environment) {
@@ -44,7 +37,6 @@ class MainViewModel : ViewModel() {
     // Configure the Imprint SDK with the required parameters
     val configuration = ImprintConfiguration(
       clientSecret = _clientSecret.value,
-      partnerReference = _partnerReference.value,
       environment = environment,
     )
 
@@ -62,11 +54,11 @@ class MainViewModel : ViewModel() {
           }
 
           ImprintCompletionState.IN_PROGRESS -> {
-            "Application abandoned"
+            "Application interrupted\n$metadataInfo"
           }
 
           ImprintCompletionState.ERROR -> {
-            "Error occurred"
+            "Error occurred\n$metadataInfo"
           }
         }
         _completionState.value = resultText

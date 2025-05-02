@@ -13,17 +13,17 @@ enum class ImprintProcessState {
   ERROR;
 
   companion object {
-    fun fromString(value: String?): ImprintProcessState {
+    fun fromString(value: String?): ImprintProcessState? {
       return try {
-        value?.let { enumValueOf<ImprintProcessState>(it) } ?: CUSTOMER_CLOSED
+        value?.let { enumValueOf<ImprintProcessState>(it) }
       } catch (e: IllegalArgumentException) {
-        CUSTOMER_CLOSED
+        null
       }
     }
   }
 }
 
-fun ImprintProcessState.toCompletionState(): ImprintCompletionState {
+fun ImprintProcessState?.toCompletionState(): ImprintCompletionState {
   return when (this) {
     ImprintProcessState.OFFER_ACCEPTED -> ImprintCompletionState.OFFER_ACCEPTED
     ImprintProcessState.REJECTED -> ImprintCompletionState.REJECTED

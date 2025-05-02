@@ -20,12 +20,11 @@ import co.imprint.sdk.Imprint
 ```
 
 ### 2. Configuration
-Create an instance of `ImprintConfiguration` with your `clientSecret`, `partnerReference` and `environment`, then assign additional optional fields as needed.
+Create an instance of `ImprintConfiguration` with your `clientSecret` and `environment`, then assign additional optional fields as needed.
 
 ```Kotlin
 val configuration = ImprintConfiguration(
   clientSecret = "client_secret",
-  partnerReference: "partner_reference",
   environment = ImprintEnvironment.SANDBOX,
 )
 ```

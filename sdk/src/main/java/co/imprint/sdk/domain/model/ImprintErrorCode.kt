@@ -3,7 +3,6 @@ package co.imprint.sdk.domain.model
 enum class ImprintErrorCode(val code: String) {
   // Authentication errors
   INVALID_CLIENT_SECRET("INVALID_CLIENT_SECRET"),
-  INVALID_PARTNER_REFERENCE("INVALID_PARTNER_REFERENCE"),
 
   // Network errors
   NETWORK_CONNECTION_FAILED("NETWORK_CONNECTION_FAILED"),
