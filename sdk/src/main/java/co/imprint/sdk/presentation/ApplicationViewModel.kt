@@ -37,9 +37,7 @@ internal class ApplicationViewModel(
   val logoBitmap: StateFlow<Bitmap?> = _logoBitmap.asStateFlow()
 
   private var completionState: ImprintCompletionState = ImprintCompletionState.IN_PROGRESS
-  @VisibleForTesting
   private var processState: ImprintProcessState? = null
-  @VisibleForTesting
   private var completionData: Map<String, Any?>? = null
 
   private val _navigationEvents = MutableSharedFlow<NavigationEvent>()
@@ -80,15 +78,10 @@ internal class ApplicationViewModel(
       val logoURL = eventData.optString(Constants.LOGO_URL)
       updateLogoUrl(url = logoURL)
 
-      val resultData = it.toMap()
-
       val eventName = eventData.optString(Constants.EVENT_NAME)
       val state = ImprintProcessState.fromString(eventName)
 
-      if (state == ImprintProcessState.ERROR) {
-        val errorCode = eventData.optString(Constants.ERROR_CODE)
-        resultData["error_code"] = ImprintErrorCode.fromString(errorCode)
-      }
+      val resultData = processResultData(it, state)
 
       if (state == ImprintProcessState.CLOSED) {
         onDismiss()
@@ -97,6 +90,23 @@ internal class ApplicationViewModel(
         completionData = resultData
       }
     }
+  }
+
+  @VisibleForTesting
+  internal fun processResultData(eventData: JSONObject, state: ImprintProcessState?): MutableMap<String, Any?> {
+    val resultData = eventData.toMap().apply {
+      // Exclude fields from the result data
+      remove(Constants.EVENT_NAME)
+      remove(Constants.TIMESTAMP)
+    }
+
+    // Add error code if in ERROR state
+    if (state == ImprintProcessState.ERROR) {
+      val errorCode = eventData.optString(Constants.ERROR_CODE)
+      resultData["error_code"] = ImprintErrorCode.fromString(errorCode)
+    }
+
+    return resultData
   }
 }
 
