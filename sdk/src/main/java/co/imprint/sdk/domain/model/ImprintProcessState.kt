@@ -1,16 +1,11 @@
 package co.imprint.sdk.domain.model
 
 enum class ImprintProcessState {
-  INITIALIZED,
-  APPLICATION_STARTED,
-  OFFER_PRESENTED,
   OFFER_ACCEPTED,
   REJECTED,
-  APPLICATION_REVIEW,
-  CREDIT_FROZEN,
-  CUSTOMER_CLOSED,
-  IMPRINT_CLOSED,
-  ERROR;
+  IN_PROGRESS,
+  ERROR,
+  CLOSED;
 
   companion object {
     fun fromString(value: String?): ImprintProcessState? {

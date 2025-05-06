@@ -91,7 +91,7 @@ internal class ApplicationViewModel(
       }
       completionData = resultMap
 
-      if (state == ImprintProcessState.IMPRINT_CLOSED || state == ImprintProcessState.CUSTOMER_CLOSED) {
+      if (state == ImprintProcessState.CLOSED) {
         onDismiss()
       } else {
         processState = state
