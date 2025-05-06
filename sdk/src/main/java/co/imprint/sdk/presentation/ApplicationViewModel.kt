@@ -80,21 +80,21 @@ internal class ApplicationViewModel(
       val logoURL = eventData.optString(Constants.LOGO_URL)
       updateLogoUrl(url = logoURL)
 
-      val resultMap = it.toMap()
+      val resultData = it.toMap()
 
       val eventName = eventData.optString(Constants.EVENT_NAME)
       val state = ImprintProcessState.fromString(eventName)
 
       if (state == ImprintProcessState.ERROR) {
         val errorCode = eventData.optString(Constants.ERROR_CODE)
-        resultMap["error_code"] = ImprintErrorCode.fromString(errorCode)
+        resultData["error_code"] = ImprintErrorCode.fromString(errorCode)
       }
-      completionData = resultMap
 
       if (state == ImprintProcessState.CLOSED) {
         onDismiss()
       } else {
         processState = state
+        completionData = resultData
       }
     }
   }
