@@ -44,7 +44,7 @@ val onCompletion =
             "Application rejected\n$metadataInfo"
           }
           ImprintCompletionState.ERROR -> {
-            "Error interrupted\n$metadataInfo"
+            "Error occurred\n$metadataInfo"
           }
           else -> {
             "Application interrupted\n$metadataInfo"
