@@ -70,17 +70,17 @@ jobs:
           set -o pipefail
           ./gradlew :sdk:lintRelease | grep -v "sensitive"
 
-      # Test Demo App Integration
-      - name: Build Demo App
-        run: |
-          set -o pipefail
-          ./gradlew :sdk-demo:clean :sdk-demo:assembleDebug | grep -v "sensitive"
-
       # Test JitPack/Maven integration
       - name: Validate Maven Publication
         run: |
           set -o pipefail
           ./gradlew :sdk:publishToMavenLocal | grep -v "sensitive"
+
+      # Test Demo App Integration
+      - name: Build Demo App
+        run: |
+          set -o pipefail
+          ./gradlew :sdk-demo:clean :sdk-demo:assembleDebug | grep -v "sensitive"
 
       # Clean up workspace
       - name: Clean up
