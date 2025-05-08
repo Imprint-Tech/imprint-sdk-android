@@ -5,6 +5,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.SavedStateHandle
 import co.imprint.sdk.domain.ImprintCallbackHolder
 import co.imprint.sdk.domain.model.ImprintConfiguration
+import co.imprint.sdk.domain.model.ImprintErrorCode
+import co.imprint.sdk.domain.model.ImprintProcessState
 import co.imprint.sdk.domain.repository.ImageRepository
 import co.imprint.sdk.rules.MainDispatcherRule
 import io.mockk.coEvery
@@ -14,9 +16,11 @@ import junit.framework.TestCase.assertNotNull
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import org.json.JSONObject
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import kotlin.test.assertFalse
 
 class ApplicationViewModelTest {
 
@@ -64,7 +68,7 @@ class ApplicationViewModelTest {
   fun `updateLogoUrl should load image successfully`() = runTest {
     val bitmapImage = mockk<Bitmap>(relaxed = true)
     coEvery { imageRepository.getImageBitmap(any()) } returns bitmapImage
-    viewModel.updateLogoUrl("")
+    viewModel.updateLogoUrl("https://example.com/logo.png")
     advanceUntilIdle()
     assertEquals(bitmapImage, viewModel.logoBitmap.value)
   }
@@ -78,5 +82,58 @@ class ApplicationViewModelTest {
     assertEquals(null, viewModel.logoBitmap.value)
   }
 
+  @Test
+  fun `processResultData removes event name and timestamp fields`() {
+    // Arrange
+    val eventData = JSONObject().apply {
+      put(Constants.EVENT_NAME, "SUCCESS")
+      put(Constants.SOURCE, "MOBILE_SDK")
+      put("other_field", "value")
+    }
+    val state = ImprintProcessState.OFFER_ACCEPTED
 
+    // Act
+    val result = viewModel.processResultData(eventData, state)
+
+    // Assert
+    assertFalse(result.containsKey(Constants.EVENT_NAME))
+    assertFalse(result.containsKey(Constants.SOURCE))
+    assertEquals("value", result["other_field"])
+  }
+
+  @Test
+  fun `processResultData adds error code for ERROR state`() {
+    // Arrange
+    val eventData = JSONObject().apply {
+      put(Constants.EVENT_NAME, "ERROR")
+      put(Constants.ERROR_CODE, "NETWORK_CONNECTION_FAILED")
+    }
+    val state = ImprintProcessState.ERROR
+
+    // Act
+    val result = viewModel.processResultData(eventData, state)
+
+    // Assert
+    assertEquals(ImprintErrorCode.NETWORK_CONNECTION_FAILED, result["error_code"])
+  }
+
+  @Test
+  fun `processResultData preserves other fields`() {
+    // Arrange
+    val eventData = JSONObject().apply {
+      put(Constants.EVENT_NAME, "OFFER_ACCEPTED")
+      put("field1", "value1")
+      put("field2", 42)
+      put("field3", true)
+    }
+    val state = ImprintProcessState.OFFER_ACCEPTED
+
+    // Act
+    val result = viewModel.processResultData(eventData, state)
+
+    // Assert
+    assertEquals("value1", result["field1"])
+    assertEquals(42, result["field2"])
+    assertEquals(true, result["field3"])
+  }
 }

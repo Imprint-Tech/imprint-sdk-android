@@ -37,9 +37,7 @@ internal class ApplicationViewModel(
   val logoBitmap: StateFlow<Bitmap?> = _logoBitmap.asStateFlow()
 
   private var completionState: ImprintCompletionState = ImprintCompletionState.IN_PROGRESS
-  @VisibleForTesting
   private var processState: ImprintProcessState? = null
-  @VisibleForTesting
   private var completionData: Map<String, Any?>? = null
 
   private val _navigationEvents = MutableSharedFlow<NavigationEvent>()
@@ -78,25 +76,40 @@ internal class ApplicationViewModel(
   fun processEventData(eventData: JSONObject?) {
     eventData?.let {
       val logoURL = eventData.optString(Constants.LOGO_URL)
-      updateLogoUrl(url = logoURL)
 
-      val resultMap = it.toMap()
-
-      val eventName = eventData.optString(Constants.EVENT_NAME)
-      val state = ImprintProcessState.fromString(eventName)
-
-      if (state == ImprintProcessState.ERROR) {
-        val errorCode = eventData.optString(Constants.ERROR_CODE)
-        resultMap["error_code"] = ImprintErrorCode.fromString(errorCode)
-      }
-      completionData = resultMap
-
-      if (state == ImprintProcessState.IMPRINT_CLOSED || state == ImprintProcessState.CUSTOMER_CLOSED) {
-        onDismiss()
+      if (logoURL.isNotEmpty()) {
+        updateLogoUrl(url = logoURL)
       } else {
-        processState = state
+        val eventName = eventData.optString(Constants.EVENT_NAME)
+        val state = ImprintProcessState.fromString(eventName)
+
+        val resultData = processResultData(it, state)
+
+        if (state == ImprintProcessState.CLOSED) {
+          onDismiss()
+        } else {
+          processState = state
+          completionData = resultData
+        }
       }
     }
+  }
+
+  @VisibleForTesting
+  internal fun processResultData(eventData: JSONObject, state: ImprintProcessState?): MutableMap<String, Any?> {
+    val resultData = eventData.toMap().apply {
+      // Exclude fields from the result data
+      remove(Constants.EVENT_NAME)
+      remove(Constants.SOURCE)
+    }
+
+    // Add error code if in ERROR state
+    if (state == ImprintProcessState.ERROR) {
+      val errorCode = eventData.optString(Constants.ERROR_CODE)
+      resultData["error_code"] = ImprintErrorCode.fromString(errorCode)
+    }
+
+    return resultData
   }
 }
 

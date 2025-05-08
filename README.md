@@ -34,7 +34,7 @@ Define the completion handler `onCompletion` to manage the terminal states whe
 
 ```Kotlin
 val onCompletion =
-      { state: ImprintCompletionState, metadata: Map<String, String?>? ->
+      { state: ImprintCompletionState, metadata: Map<String, Any?>? ->
         val metadataInfo = metadata?.toString() ?: "No metadata"
         val result = when (state) {
           ImprintCompletionState.OFFER_ACCEPTED -> {
@@ -43,11 +43,11 @@ val onCompletion =
           ImprintCompletionState.REJECTED -> {
             "Application rejected\n$metadataInfo"
           }
-          ImprintCompletionState.ABANDONED -> {
-            "Application abandoned"
-          }
           ImprintCompletionState.ERROR -> {
             "Error occured\n$metadataInfo"
+          }
+          else -> {
+            "Application interrupted\n$metadataInfo"
           }
         }
         Log.d("Application result:", result)
@@ -61,7 +61,7 @@ Once you have configured the `ImprintConfiguration`, initiate the application f
 fun startApplication(
     context: Context,
     configuration: ImprintConfiguration,
-    onCompletion: (ImprintCompletionState, Map<String, String?>?) -> Unit,
+    onCompletion: (ImprintCompletionState, Map<String, Any?>?) -> Unit,
   )
 ```
 
