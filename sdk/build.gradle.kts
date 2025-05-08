@@ -36,7 +36,7 @@ android {
   }
 }
 
-val sdkVersion = "0.0.1-Local"
+val sdkVersion = project.findProperty("SDK_VERSION") as String? ?: "0.0.1-Local"
 
 mavenPublishing {
   configure(AndroidSingleVariantLibrary(
