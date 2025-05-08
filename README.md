@@ -4,12 +4,12 @@
 ```
 repositories {     
     ...     
-    maven { url 'https://jitpack.io' }     
+    mavenCentral() 
     ...
 }
 
 dependencies {     
-    implementation 'com.github.Imprint-Tech:imprint-sdk-android:<version>'
+    implementation 'co.imprint.sdk:imprint-sdk:<version>'
 }
 ```
 
@@ -44,7 +44,7 @@ val onCompletion =
             "Application rejected\n$metadataInfo"
           }
           ImprintCompletionState.ERROR -> {
-            "Error occured\n$metadataInfo"
+            "Error interrupted\n$metadataInfo"
           }
           else -> {
             "Application interrupted\n$metadataInfo"
