@@ -87,7 +87,7 @@ class ApplicationViewModelTest {
     // Arrange
     val eventData = JSONObject().apply {
       put(Constants.EVENT_NAME, "SUCCESS")
-      put(Constants.TIMESTAMP, "2023-01-01T12:00:00Z")
+      put(Constants.SOURCE, "MOBILE_SDK")
       put("other_field", "value")
     }
     val state = ImprintProcessState.OFFER_ACCEPTED
@@ -97,7 +97,7 @@ class ApplicationViewModelTest {
 
     // Assert
     assertFalse(result.containsKey(Constants.EVENT_NAME))
-    assertFalse(result.containsKey(Constants.TIMESTAMP))
+    assertFalse(result.containsKey(Constants.SOURCE))
     assertEquals("value", result["other_field"])
   }
 

@@ -76,18 +76,21 @@ internal class ApplicationViewModel(
   fun processEventData(eventData: JSONObject?) {
     eventData?.let {
       val logoURL = eventData.optString(Constants.LOGO_URL)
-      updateLogoUrl(url = logoURL)
 
-      val eventName = eventData.optString(Constants.EVENT_NAME)
-      val state = ImprintProcessState.fromString(eventName)
-
-      val resultData = processResultData(it, state)
-
-      if (state == ImprintProcessState.CLOSED) {
-        onDismiss()
+      if (logoURL.isNotEmpty()) {
+        updateLogoUrl(url = logoURL)
       } else {
-        processState = state
-        completionData = resultData
+        val eventName = eventData.optString(Constants.EVENT_NAME)
+        val state = ImprintProcessState.fromString(eventName)
+
+        val resultData = processResultData(it, state)
+
+        if (state == ImprintProcessState.CLOSED) {
+          onDismiss()
+        } else {
+          processState = state
+          completionData = resultData
+        }
       }
     }
   }
@@ -97,7 +100,7 @@ internal class ApplicationViewModel(
     val resultData = eventData.toMap().apply {
       // Exclude fields from the result data
       remove(Constants.EVENT_NAME)
-      remove(Constants.TIMESTAMP)
+      remove(Constants.SOURCE)
     }
 
     // Add error code if in ERROR state
