@@ -36,6 +36,7 @@ android {
   }
 }
 
+val isCi = System.getenv("CI") == "true"
 val sdkVersion = project.findProperty("SDK_VERSION") as String? ?: "0.0.1-Local"
 
 mavenPublishing {
@@ -49,7 +50,9 @@ mavenPublishing {
   ))
 
   publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = false)
-  signAllPublications()
+  if (!isCi) {
+    signAllPublications()
+  }
 
   coordinates("co.imprint.sdk", "imprint-sdk", sdkVersion)
 
