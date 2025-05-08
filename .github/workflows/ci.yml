@@ -55,38 +55,38 @@ jobs:
       # Build SDK
       - name: Build SDK
         run: |
-          set +x
+          set -o pipefail
           ./gradlew :sdk:clean :sdk:assembleRelease | grep -v "sensitive"
 
       # Run Unit Tests
       - name: Run Unit Tests
         run: |
-          set +x
+          set -o pipefail
           ./gradlew :sdk:testReleaseUnitTest | grep -v "sensitive"
 
       # Run Android Lint
       - name: Run Android Lint
         run: |
-          set +x
+          set -o pipefail
           ./gradlew :sdk:lintRelease | grep -v "sensitive"
 
       # Test Demo App Integration
       - name: Build Demo App
         run: |
-          set +x
+          set -o pipefail
           ./gradlew :sdk-demo:clean :sdk-demo:assembleDebug | grep -v "sensitive"
 
       # Test JitPack/Maven integration
       - name: Validate Maven Publication
         run: |
-          set +x
+          set -o pipefail
           ./gradlew :sdk:publishToMavenLocal | grep -v "sensitive"
 
       # Clean up workspace
       - name: Clean up
         if: always()
         run: |
-          set +x
+          set -o pipefail
           rm -rf ~/.gradle/caches/
           rm -rf build/
           rm -rf */build/
