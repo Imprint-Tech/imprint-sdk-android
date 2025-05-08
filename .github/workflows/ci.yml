@@ -86,7 +86,7 @@ jobs:
       - name: Clean up
         if: always()
         run: |
-          set -o pipefail
+          set -x
           rm -rf ~/.gradle/caches/
           rm -rf build/
           rm -rf */build/
