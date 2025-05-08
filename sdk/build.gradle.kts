@@ -37,11 +37,7 @@ android {
 }
 
 val isCi = System.getenv("CI") == "true"
-val sdkVersion = project.findProperty("SDK_VERSION") as String? ?: if (isCi) {
-  "0.0.1-SNAPSHOT" // allow safe dummy version in CI builds
-} else {
-  "0.0.1-Local"
-}
+val sdkVersion = project.findProperty("SDK_VERSION") as String? ?: "0.0.1-Local"
 
 mavenPublishing {
   configure(AndroidSingleVariantLibrary(
@@ -54,7 +50,9 @@ mavenPublishing {
   ))
 
   publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = false)
-  signAllPublications()
+  if (!isCi) {
+    signAllPublications()
+  }
 
   coordinates("co.imprint.sdk", "imprint-sdk", sdkVersion)
 
