@@ -38,7 +38,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build and run tests
-        run: ./gradlew clean build test
+        run: ./gradlew :sdk:clean :sdk:build :sdk:test
 
       - name: Publish to Maven Central
         run: ./gradlew publishAllPublicationsToMavenCentralRepository -PSDK_VERSION=${{ github.event.inputs.version }}
@@ -78,7 +78,7 @@ jobs:
           git log $commit_range --grep="(FIX)" --pretty=format:"- %s" | sed 's/(FIX) //' >> CHANGELOG.txt || true
 
           echo -e "\n## 🔧 Improvements" >> CHANGELOG.txt
-          git log $commit_range --grep="(IMPR)" --pretty=format:"- %s" | sed 's/(IMPR) //' >> CHANGELOG.txt || true
+          git log $commit_range --grep="(CHORE)" --pretty=format:"- %s" | sed 's/(CHORE) //' >> CHANGELOG.txt || true
 
           echo -e "\n## 📝 Other Changes" >> CHANGELOG.txt
           git log $commit_range --invert-grep --grep="(FEAT)\|(FIX)\|(IMPR)" --pretty=format:"- %s" >> CHANGELOG.txt || true
