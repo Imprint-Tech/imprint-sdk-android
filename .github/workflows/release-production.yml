@@ -100,9 +100,7 @@ jobs:
               echo "$OTHERS"
               echo ""
             fi
-            
-            echo "CHANGELOG_EOF"
-          } >> $GITHUB_OUTPUT
+          } > CHANGELOG.txt
 
       - name: Tag the release
         run: |
