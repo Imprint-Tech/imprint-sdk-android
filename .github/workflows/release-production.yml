@@ -73,8 +73,7 @@ jobs:
           OTHERS=$(echo "$CHANGELOG" | grep -v -i "feat\|feature\|add\|fix\|bug\|issue\|improve\|enhance\|refactor\|perf" || echo "")
             
           {
-            echo "changelog<<CHANGELOG_EOF"
-            echo "## What's Changed in v${{ steps.version.outputs.new_version }}"
+            echo "## What's Changed in v${{ github.event.inputs.version }}"
             echo ""
             
             if [ -n "$FEATURES" ]; then
