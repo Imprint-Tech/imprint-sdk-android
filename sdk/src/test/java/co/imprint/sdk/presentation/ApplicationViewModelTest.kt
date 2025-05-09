@@ -106,7 +106,7 @@ class ApplicationViewModelTest {
     // Arrange
     val eventData = JSONObject().apply {
       put(Constants.EVENT_NAME, "ERROR")
-      put(Constants.ERROR_CODE, "NETWORK_CONNECTION_FAILED")
+      put(Constants.ERROR_CODE, "INVALID_CLIENT_SECRET")
     }
     val state = ImprintProcessState.ERROR
 
@@ -114,7 +114,7 @@ class ApplicationViewModelTest {
     val result = viewModel.processResultData(eventData, state)
 
     // Assert
-    assertEquals(ImprintErrorCode.NETWORK_CONNECTION_FAILED, result["error_code"])
+    assertEquals(ImprintErrorCode.INVALID_CLIENT_SECRET, result["error_code"])
   }
 
   @Test

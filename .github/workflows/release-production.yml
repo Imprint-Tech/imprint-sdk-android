@@ -1,5 +1,9 @@
 name: Release Android SDK to Maven Central
 
+env:
+  CI: false
+  CD: true
+
 on:
   workflow_dispatch:
     inputs:
@@ -38,7 +42,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build and run tests
-        run: ./gradlew clean build test
+        run: ./gradlew :sdk:clean :sdk:build :sdk:test
 
       - name: Publish to Maven Central
         run: ./gradlew publishAllPublicationsToMavenCentralRepository -PSDK_VERSION=${{ github.event.inputs.version }}
@@ -48,6 +52,54 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGINMEMORYKEYPASSWORD }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.ORG_GRADLE_PROJECT_MAVENCENTRALUSERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.ORG_GRADLE_PROJECT_MAVENCENTRALPASSWORD }}
+          
+      - name: Generate Changelog
+        id: changelog
+        run: |
+          set +x
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+            
+          if [ -z "$PREVIOUS_TAG" ]; then
+            echo "No previous tag found; using full history"
+            CHANGELOG=$(git log --pretty=format:"- %s (%h)" --no-merges)
+          else
+            echo "Generating changelog since $PREVIOUS_TAG"
+            CHANGELOG=$(git log ${PREVIOUS_TAG}..HEAD --pretty=format:"- %s (%h)" --no-merges)
+          fi
+            
+          FEATURES=$(echo "$CHANGELOG" | grep -i "feat\|feature" || echo "")
+          FIXES=$(echo "$CHANGELOG" | grep -i "fix\|bug" || echo "")
+          IMPROVEMENTS=$(echo "$CHANGELOG" | grep -i "improve\|enhance\|refactor\|perf" || echo "")
+          OTHERS=$(echo "$CHANGELOG" | grep -v -i "feat\|feature\|add\|fix\|bug\|issue\|improve\|enhance\|refactor\|perf" || echo "")
+            
+          {
+            echo "## What's Changed in v${{ github.event.inputs.version }}"
+            echo ""
+            
+            if [ -n "$FEATURES" ]; then
+              echo "### New Features"
+              echo "$FEATURES"
+              echo ""
+            fi
+            
+            if [ -n "$FIXES" ]; then
+              echo "### Bug Fixes"
+              echo "$FIXES"
+              echo ""
+            fi
+            
+            if [ -n "$IMPROVEMENTS" ]; then
+              echo "### Improvements"
+              echo "$IMPROVEMENTS"
+              echo ""
+            fi
+            
+            if [ -n "$OTHERS" ]; then
+              echo "### Other Changes"
+              echo "$OTHERS"
+              echo ""
+            fi
+          } > CHANGELOG.txt
 
       - name: Tag the release
         run: |
@@ -56,34 +108,6 @@ jobs:
           git fetch --tags
           git tag v${{ github.event.inputs.version }}
           git push origin v${{ github.event.inputs.version }}
-          
-      - name: Generate Categorized Changelog
-        id: changelog
-        run: |
-          previous_tag=$(git tag --sort=-creatordate | grep '^v' | grep -v "${{ github.event.inputs.version }}" | head -n 1)
-          echo "Previous tag: $previous_tag"
-
-          if [ -z "$previous_tag" ]; then
-            echo "No previous tag found. Including all commits."
-            commit_range=""
-          else
-            echo "Using commit range from $previous_tag to HEAD."
-            commit_range="$previous_tag..HEAD"
-          fi
-
-          echo "## ✨ Features" > CHANGELOG.txt
-          git log $commit_range --grep="(FEAT)" --pretty=format:"- %s" | sed 's/(FEAT) //' >> CHANGELOG.txt || true
-
-          echo -e "\n## 🐛 Bug Fixes" >> CHANGELOG.txt
-          git log $commit_range --grep="(FIX)" --pretty=format:"- %s" | sed 's/(FIX) //' >> CHANGELOG.txt || true
-
-          echo -e "\n## 🔧 Improvements" >> CHANGELOG.txt
-          git log $commit_range --grep="(IMPR)" --pretty=format:"- %s" | sed 's/(IMPR) //' >> CHANGELOG.txt || true
-
-          echo -e "\n## 📝 Other Changes" >> CHANGELOG.txt
-          git log $commit_range --invert-grep --grep="(FEAT)\|(FIX)\|(IMPR)" --pretty=format:"- %s" >> CHANGELOG.txt || true
-
-          cat CHANGELOG.txt
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
