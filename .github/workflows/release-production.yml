@@ -61,33 +61,56 @@ jobs:
           git tag v${{ github.event.inputs.version }}
           git push origin v${{ github.event.inputs.version }}
           
-      - name: Generate Categorized Changelog
+      - name: Generate Changelog
         id: changelog
         run: |
-          previous_tag=$(git tag --sort=-creatordate | grep '^v' | grep -v "${{ github.event.inputs.version }}" | head -n 1)
-          echo "Previous tag: $previous_tag"
-
-          if [ -z "$previous_tag" ]; then
-            echo "No previous tag found. Including all commits."
-            commit_range=""
+          set +x
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+            
+          if [ -z "$PREVIOUS_TAG" ]; then
+            echo "No previous tag found; using full history"
+            CHANGELOG=$(git log --pretty=format:"- %s (%h)" --no-merges)
           else
-            echo "Using commit range from $previous_tag to HEAD."
-            commit_range="$previous_tag..HEAD"
+            echo "Generating changelog since $PREVIOUS_TAG"
+            CHANGELOG=$(git log ${PREVIOUS_TAG}..HEAD --pretty=format:"- %s (%h)" --no-merges)
           fi
-
-          echo "## ✨ Features" > CHANGELOG.txt
-          git log $commit_range --grep="(FEAT)" --pretty=format:"- %s" | sed 's/(FEAT) //' >> CHANGELOG.txt || true
-
-          echo -e "\n## 🐛 Bug Fixes" >> CHANGELOG.txt
-          git log $commit_range --grep="(FIX)" --pretty=format:"- %s" | sed 's/(FIX) //' >> CHANGELOG.txt || true
-
-          echo -e "\n## 🔧 Improvements" >> CHANGELOG.txt
-          git log $commit_range --grep="(CHORE)" --pretty=format:"- %s" | sed 's/(CHORE) //' >> CHANGELOG.txt || true
-
-          echo -e "\n## 📝 Other Changes" >> CHANGELOG.txt
-          git log $commit_range --invert-grep --grep="(FEAT)\|(FIX)\|(IMPR)" --pretty=format:"- %s" >> CHANGELOG.txt || true
-
-          cat CHANGELOG.txt
+            
+          FEATURES=$(echo "$CHANGELOG" | grep -i "feat\|feature" || echo "")
+          FIXES=$(echo "$CHANGELOG" | grep -i "fix\|bug" || echo "")
+          IMPROVEMENTS=$(echo "$CHANGELOG" | grep -i "improve\|enhance\|refactor\|perf" || echo "")
+          OTHERS=$(echo "$CHANGELOG" | grep -v -i "feat\|feature\|add\|fix\|bug\|issue\|improve\|enhance\|refactor\|perf" || echo "")
+            
+          {
+            echo "changelog<<CHANGELOG_EOF"
+            echo "## What's Changed in v${{ steps.version.outputs.new_version }}"
+            echo ""
+            
+            if [ -n "$FEATURES" ]; then
+              echo "### New Features"
+              echo "$FEATURES"
+              echo ""
+            fi
+            
+            if [ -n "$FIXES" ]; then
+              echo "### Bug Fixes"
+              echo "$FIXES"
+              echo ""
+            fi
+            
+            if [ -n "$IMPROVEMENTS" ]; then
+              echo "### Improvements"
+              echo "$IMPROVEMENTS"
+              echo ""
+            fi
+            
+            if [ -n "$OTHERS" ]; then
+              echo "### Other Changes"
+              echo "$OTHERS"
+              echo ""
+            fi
+            
+            echo "CHANGELOG_EOF"
+          } >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
