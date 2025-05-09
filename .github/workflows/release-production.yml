@@ -1,5 +1,9 @@
 name: Release Android SDK to Maven Central
 
+env:
+  CI: false
+  CD: true
+
 on:
   workflow_dispatch:
     inputs:

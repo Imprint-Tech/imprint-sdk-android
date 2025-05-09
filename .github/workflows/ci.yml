@@ -1,5 +1,9 @@
 name: CI
 
+env:
+  CI: true
+  CD: false
+
 on:
   push:
     branches: ['**']
