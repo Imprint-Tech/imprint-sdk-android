@@ -73,7 +73,8 @@ internal fun WebViewWrapper(
             isUserGesture: Boolean,
             resultMsg: Message?
           ): Boolean {
-            val newWebView = WebView(view!!.context)
+            if (view == null) return false
+            val newWebView = WebView(view.context)
 
             newWebView.webViewClient = object : WebViewClient() {
               override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
