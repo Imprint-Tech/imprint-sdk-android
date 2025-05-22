@@ -22,33 +22,38 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
   val completionState by viewModel.completionState.collectAsState()
   val context = LocalContext.current
 
-  Column(
-    modifier = Modifier
-      .fillMaxSize()
-      .padding(16.dp)
-      .verticalScroll(rememberScrollState())
-  ) {
-    InputField(
-      label = "Client Secret:",
-      value = clientSecret,
-      onValueChange = viewModel::updateClientSecret,
-      maxLines = 6
-    )
+  Scaffold(
+    contentWindowInsets = WindowInsets.systemBars,
+  ) { innerPadding ->
+    Column(
+      modifier = Modifier
+        .fillMaxSize()
+        .padding(innerPadding)
+        .padding(16.dp)
+        .verticalScroll(rememberScrollState())
+    ) {
+      InputField(
+        label = "Client Secret:",
+        value = clientSecret,
+        onValueChange = viewModel::updateClientSecret,
+        maxLines = 6
+      )
 
-    Spacer(modifier = Modifier.height(16.dp))
+      Spacer(modifier = Modifier.height(16.dp))
 
-    EnvironmentTabs(
-      selectedEnv = selectedEnvironment,
-      onEnvSelected = viewModel::selectEnvironment
-    )
+      EnvironmentTabs(
+        selectedEnv = selectedEnvironment,
+        onEnvSelected = viewModel::selectEnvironment
+      )
 
-    Spacer(modifier = Modifier.height(32.dp))
+      Spacer(modifier = Modifier.height(32.dp))
 
-    StartButton(onClick = { viewModel.startApplication(context) })
+      StartButton(onClick = { viewModel.startApplication(context) })
 
-    Spacer(modifier = Modifier.height(64.dp))
+      Spacer(modifier = Modifier.height(64.dp))
 
-    CompletionStateBox(completionState)
+      CompletionStateBox(completionState)
+    }
   }
 }
 
