@@ -1,6 +1,9 @@
 ## Installation
 
 ### Step 1: Add to app-level `build.gradle` and sync project to gradle
+[![Maven Central](https://img.shields.io/maven-central/v/co.imprint.sdk/imprint-sdk.svg)](https://central.sonatype.com/artifact/co.imprint.sdk/imprint-sdk)
+
+
 ```
 repositories {     
     ...     
