@@ -3,6 +3,7 @@ package co.imprint.sdk.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.MaterialTheme
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -21,7 +22,7 @@ internal class ApplicationActivity : ComponentActivity(), IsolatedKoinComponent 
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-
+    enableEdgeToEdge()
     setContent {
       MaterialTheme {
         ApplicationView(viewModel)

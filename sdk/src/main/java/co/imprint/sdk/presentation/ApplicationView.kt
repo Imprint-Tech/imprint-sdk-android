@@ -1,8 +1,12 @@
 package co.imprint.sdk.presentation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,8 +30,10 @@ internal fun ApplicationView(viewModel: ApplicationViewModel) {
         onDismiss = {
           viewModel.onDismiss()
         },
+        modifier = Modifier.statusBarsPadding()
       )
-    }
+    },
+    contentWindowInsets = WindowInsets.systemBars,
   ) { innerPadding ->
     WebViewWrapper(viewModel = viewModel, modifier = Modifier.padding(innerPadding))
   }

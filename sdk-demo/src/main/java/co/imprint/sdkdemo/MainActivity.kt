@@ -3,6 +3,7 @@ package co.imprint.sdkdemo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.viewmodel.compose.viewModel
 import co.imprint.sdkdemo.ui.theme.ImprintSDKDemoTheme
 import org.koin.android.ext.koin.androidContext
@@ -20,6 +21,7 @@ class MainActivity : ComponentActivity() {
       //No modules loaded
     }
 
+    enableEdgeToEdge()
     setContent {
       ImprintSDKDemoTheme {
         val viewModel: MainViewModel = viewModel()
