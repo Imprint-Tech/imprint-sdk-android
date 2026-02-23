@@ -58,6 +58,7 @@ internal class ApplicationViewModel(
   fun onDismiss() {
     completionState = processState.toCompletionState()
     val onCompletion = ImprintCallbackHolder.onApplicationCompletion
+    ImprintCallbackHolder.onApplicationCompletion = null
     onCompletion?.invoke(completionState, completionData)
     finishActivity()
   }
