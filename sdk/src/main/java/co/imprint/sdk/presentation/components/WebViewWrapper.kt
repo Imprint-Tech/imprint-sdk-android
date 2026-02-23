@@ -2,15 +2,12 @@ package co.imprint.sdk.presentation.components
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Message
 import android.util.Log
+import android.view.ViewGroup
 import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
-import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
-import android.webkit.WebResourceResponse
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -34,6 +31,11 @@ internal fun WebViewWrapper(
     factory = { context ->
       WebView(context).apply {
         // Configure WebView settings
+        layoutParams = ViewGroup.LayoutParams(
+          ViewGroup.LayoutParams.MATCH_PARENT,
+          ViewGroup.LayoutParams.MATCH_PARENT,
+        )
+
         settings.apply {
           javaScriptEnabled = true
           domStorageEnabled = true

@@ -62,14 +62,12 @@ private fun LogoImage(bitmap: Bitmap?) {
 
 @Composable
 private fun CloseButton(onDismiss: () -> Unit) {
-  IconButton(
-    onClick = onDismiss,
-    modifier = Modifier.size(24.dp),
-  ) {
+  IconButton(onClick = onDismiss) {
     Icon(
       imageVector = Icons.Default.Close,
       contentDescription = "Close",
       tint = Color.Black,
+      modifier = Modifier.size(24.dp),
     )
   }
 }

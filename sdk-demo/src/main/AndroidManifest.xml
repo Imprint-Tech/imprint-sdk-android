@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/app_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ImprintSDKDemo"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="false">
         <activity
             android:name="co.imprint.sdkdemo.MainActivity"
             android:exported="true"
