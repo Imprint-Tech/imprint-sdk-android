@@ -23,6 +23,8 @@ object Imprint {
    * @param context The context from which the application process will be presented.
    * @param configuration The configuration settings for the application process.
    * @param onCompletion Callback invoked exactly once when the application process ends.
+   * The first parameter is the terminal [ImprintCompletionState]. The second parameter is a
+   * metadata map whose contents vary by state — see [ImprintCompletionState] for details.
    */
   fun startApplication(
     context: Context,
