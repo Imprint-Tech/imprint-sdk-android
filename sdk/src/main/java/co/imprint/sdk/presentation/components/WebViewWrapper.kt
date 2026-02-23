@@ -13,8 +13,14 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import co.imprint.sdk.presentation.ApplicationViewModel
 import co.imprint.sdk.presentation.Constants
 import org.json.JSONObject
@@ -26,86 +32,103 @@ internal fun WebViewWrapper(
   viewModel: ApplicationViewModel,
   modifier: Modifier = Modifier,
 ) {
-  AndroidView(
-    modifier = modifier.fillMaxSize(),
-    factory = { context ->
-      WebView(context).apply {
-        // Configure WebView settings
-        layoutParams = ViewGroup.LayoutParams(
-          ViewGroup.LayoutParams.MATCH_PARENT,
-          ViewGroup.LayoutParams.MATCH_PARENT,
-        )
+  val context = LocalContext.current
+  val lifecycleOwner = LocalLifecycleOwner.current
 
-        settings.apply {
-          javaScriptEnabled = true
-          domStorageEnabled = true
-          cacheMode = WebSettings.LOAD_NO_CACHE
-          useWideViewPort = true
-          loadWithOverviewMode = true
+  val webView = remember {
+    WebView(context).apply {
+      layoutParams = ViewGroup.LayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT,
+      )
 
-          javaScriptCanOpenWindowsAutomatically = true
-          setSupportMultipleWindows(true)
-        }
+      settings.apply {
+        javaScriptEnabled = true
+        domStorageEnabled = true
+        cacheMode = WebSettings.LOAD_NO_CACHE
+        useWideViewPort = true
+        loadWithOverviewMode = true
 
-        clearCache(true)
-        clearHistory()
-
-        // Add JavaScript interface
-        addJavascriptInterface(
-          object {
-            @JavascriptInterface
-            fun onMessage(data: String) {
-              try {
-                val jsonObject = JSONObject(data)
-                viewModel.processEventData(jsonObject)
-              } catch (e: Exception) {
-                Log.e("WebViewWrapper", "onMessage: Error parsing data from Web view")
-              }
-            }
-          },
-          Constants.CALLBACK_HANDLER_NAME,
-        )
-
-        webViewClient = WebViewClient()
-
-        webChromeClient = object : WebChromeClient() {
-          override fun onCreateWindow(
-            view: WebView?,
-            isDialog: Boolean,
-            isUserGesture: Boolean,
-            resultMsg: Message?
-          ): Boolean {
-            if (view == null) return false
-            val newWebView = WebView(view.context)
-
-            newWebView.webViewClient = object : WebViewClient() {
-              override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                val url = request?.url?.toString()
-                if (!url.isNullOrEmpty()) {
-                  try {
-                    val intent = Intent(Intent.ACTION_VIEW, url.toUri())
-                    context.startActivity(intent)
-                    return true
-                  } catch (e: Exception) {
-                    Log.e("WebViewWrapper", "Cannot open URL: $url", e)
-                  }
-                }
-                return false
-              }
-            }
-
-            val transport = resultMsg?.obj as? WebView.WebViewTransport
-            transport?.webView = newWebView
-            resultMsg?.sendToTarget()
-
-            return true
-          }
-        }
-        loadUrl(viewModel.webUrl)
+        javaScriptCanOpenWindowsAutomatically = true
+        setSupportMultipleWindows(true)
       }
-    },
-    update = { _ ->
-      // Optional: Additional WebView updates if needed
+
+      clearCache(true)
+      clearHistory()
+
+      addJavascriptInterface(
+        object {
+          @JavascriptInterface
+          fun onMessage(data: String) {
+            try {
+              val jsonObject = JSONObject(data)
+              viewModel.processEventData(jsonObject)
+            } catch (e: Exception) {
+              Log.e("WebViewWrapper", "onMessage: Error parsing data from Web view")
+            }
+          }
+        },
+        Constants.CALLBACK_HANDLER_NAME,
+      )
+
+      webViewClient = WebViewClient()
+
+      webChromeClient = object : WebChromeClient() {
+        override fun onCreateWindow(
+          view: WebView?,
+          isDialog: Boolean,
+          isUserGesture: Boolean,
+          resultMsg: Message?
+        ): Boolean {
+          if (view == null) return false
+          val newWebView = WebView(view.context)
+
+          newWebView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+              val url = request?.url?.toString()
+              if (!url.isNullOrEmpty()) {
+                try {
+                  val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+                  context.startActivity(intent)
+                  return true
+                } catch (e: Exception) {
+                  Log.e("WebViewWrapper", "Cannot open URL: $url", e)
+                }
+              }
+              return false
+            }
+          }
+
+          val transport = resultMsg?.obj as? WebView.WebViewTransport
+          transport?.webView = newWebView
+          resultMsg?.sendToTarget()
+
+          return true
+        }
+      }
+
+      loadUrl(viewModel.webUrl)
     }
+  }
+
+  DisposableEffect(lifecycleOwner) {
+    val observer = LifecycleEventObserver { _, event ->
+      when (event) {
+        Lifecycle.Event.ON_RESUME -> webView.onResume()
+        Lifecycle.Event.ON_PAUSE -> webView.onPause()
+        else -> {}
+      }
+    }
+    lifecycleOwner.lifecycle.addObserver(observer)
+    onDispose {
+      lifecycleOwner.lifecycle.removeObserver(observer)
+      webView.stopLoading()
+      webView.destroy()
+    }
+  }
+
+  AndroidView(
+    factory = { webView },
+    modifier = modifier.fillMaxSize(),
   )
 }

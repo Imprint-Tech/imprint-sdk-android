@@ -99,6 +99,7 @@ dependencies {
 
   // Lifecycle dependency for view models in Compose
   implementation(libs.androidx.lifecycle.viewmodel.compose)
+  implementation(libs.androidx.lifecycle.runtime.compose)
   implementation(libs.androidx.activity.compose)
 
   //Koin
