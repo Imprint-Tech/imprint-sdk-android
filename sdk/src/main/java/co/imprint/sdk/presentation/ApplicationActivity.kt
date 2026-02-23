@@ -2,6 +2,7 @@ package co.imprint.sdk.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +29,12 @@ internal class ApplicationActivity : ComponentActivity(), IsolatedKoinComponent 
         ApplicationView(viewModel)
       }
     }
+
+    onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+      override fun handleOnBackPressed() {
+        viewModel.onDismiss()
+      }
+    })
 
     lifecycleScope.launch {
       repeatOnLifecycle(Lifecycle.State.STARTED) {
