@@ -5,6 +5,7 @@
     <application android:usesCleartextTraffic="false">
         <activity
             android:name="co.imprint.sdk.presentation.ApplicationActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|navigation|keyboard|keyboardHidden|uiMode|density" />
     </application>
 </manifest>
