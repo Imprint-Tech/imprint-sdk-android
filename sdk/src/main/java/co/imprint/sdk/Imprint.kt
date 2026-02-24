@@ -32,6 +32,7 @@ object Imprint {
     onCompletion: (ImprintCompletionState, Map<String, Any?>?) -> Unit,
   ) {
     if (ImprintCallbackHolder.onApplicationCompletion != null) {
+      Log.w("Imprint", "startApplication called while a session is already active. Ignoring.")
       return
     }
     ImprintCallbackHolder.onApplicationCompletion = onCompletion

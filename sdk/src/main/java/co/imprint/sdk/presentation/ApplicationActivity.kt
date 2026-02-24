@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.MaterialTheme
+import co.imprint.sdk.presentation.theme.ImprintTheme
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -25,7 +25,7 @@ internal class ApplicationActivity : ComponentActivity(), IsolatedKoinComponent 
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
     setContent {
-      MaterialTheme {
+      ImprintTheme {
         ApplicationView(viewModel)
       }
     }
