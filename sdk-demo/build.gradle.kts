@@ -60,7 +60,7 @@ dependencies {
   debugImplementation(libs.androidx.ui.test.manifest)
   implementation(libs.androidx.lifecycle.viewmodel.compose)
   implementation(libs.androidx.ui.tooling.preview)
-  implementation(libs.imprint.sdk)
+  implementation(project("::sdk"))
   //Koin
   implementation(libs.koin.android)
 }

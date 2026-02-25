@@ -28,17 +28,20 @@ class MainViewModel : ViewModel() {
   }
 
   fun startApplication(context: Context) {
-    val environment = when (_selectedEnvironment.value) {
-      Environment.STAGING -> ImprintEnvironment.STAGING
-      Environment.SANDBOX -> ImprintEnvironment.SANDBOX
-      Environment.PRODUCTION -> ImprintEnvironment.PRODUCTION
+    val configuration = when (_selectedEnvironment.value) {
+      Environment.STAGING -> ImprintConfiguration(
+        clientSecret = _clientSecret.value,
+        customHostUrl = "https://apply.stg.imprintapi.co",
+      )
+      Environment.SANDBOX -> ImprintConfiguration(
+        clientSecret = _clientSecret.value,
+        environment = ImprintEnvironment.SANDBOX,
+      )
+      Environment.PRODUCTION -> ImprintConfiguration(
+        clientSecret = _clientSecret.value,
+        environment = ImprintEnvironment.PRODUCTION,
+      )
     }
-
-    // Configure the Imprint SDK with the required parameters
-    val configuration = ImprintConfiguration(
-      clientSecret = _clientSecret.value,
-      environment = environment,
-    )
 
     // Callback function triggered when the application process is completed
     val onCompletion =

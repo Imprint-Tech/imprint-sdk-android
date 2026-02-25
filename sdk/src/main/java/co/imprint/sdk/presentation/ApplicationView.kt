@@ -11,7 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.material3.MaterialTheme
 import co.imprint.sdk.presentation.components.AppBar
 import co.imprint.sdk.presentation.components.WebViewWrapper
 
@@ -22,8 +22,8 @@ internal fun ApplicationView(viewModel: ApplicationViewModel) {
   Scaffold(
     modifier = Modifier
       .fillMaxSize()
-      .background(Color.White),
-    containerColor = Color.White,
+      .background(MaterialTheme.colorScheme.surface),
+    containerColor = MaterialTheme.colorScheme.surface,
     topBar = {
       AppBar(
         bitmap = bitmap,

@@ -15,9 +15,10 @@ import kotlinx.parcelize.Parcelize
 data class ImprintConfiguration(
   val clientSecret: String,
   val environment: ImprintEnvironment = ImprintEnvironment.PRODUCTION,
+  internal val customHostUrl: String? = null,
 ) : Parcelable {
 
   @IgnoredOnParcel
   internal val webUrl: String =
-    "${environment.hostUrl}/start?client_secret=${clientSecret}"
+    "${customHostUrl ?: environment.hostUrl}/start?client_secret=${clientSecret}"
 }

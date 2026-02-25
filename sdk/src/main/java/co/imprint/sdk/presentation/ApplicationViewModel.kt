@@ -14,6 +14,7 @@ import co.imprint.sdk.domain.model.ImprintProcessState
 import co.imprint.sdk.domain.model.toCompletionState
 import co.imprint.sdk.domain.repository.ImageRepository
 import co.imprint.sdk.presentation.utils.toMap
+import android.util.Log
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -58,6 +59,7 @@ internal class ApplicationViewModel(
   fun onDismiss() {
     completionState = processState.toCompletionState()
     val onCompletion = ImprintCallbackHolder.onApplicationCompletion
+    ImprintCallbackHolder.onApplicationCompletion = null
     onCompletion?.invoke(completionState, completionData)
     finishActivity()
   }
@@ -68,7 +70,7 @@ internal class ApplicationViewModel(
     }.onSuccess { image ->
       _logoBitmap.value = image
     }.onFailure {
-      it.printStackTrace()
+      Log.e("Imprint", "Failed to load logo image", it)
       _logoBitmap.value = null
     }
   }

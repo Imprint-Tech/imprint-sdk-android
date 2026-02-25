@@ -6,7 +6,6 @@ import co.imprint.sdk.di.IsolatedKoinComponent
 import co.imprint.sdk.domain.repository.ImageRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -18,7 +17,11 @@ internal class ImageRepositoryImpl(
     val connection = URL(url).openConnection() as HttpURLConnection
     connection.doInput = true
     connection.connect()
-    val inputStream: InputStream = connection.inputStream
-    BitmapFactory.decodeStream(inputStream)
+    try {
+      val bitmap = connection.inputStream.use { BitmapFactory.decodeStream(it) }
+      bitmap ?: throw IllegalStateException("Failed to decode image from URL: $url")
+    } finally {
+      connection.disconnect()
+    }
   }
 }
