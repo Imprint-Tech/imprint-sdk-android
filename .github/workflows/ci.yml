@@ -31,7 +31,7 @@ jobs:
         (github.event.pull_request.user.login == github.repository_owner || 
          endsWith(github.event.pull_request.user.email, '@imprint.co')))
 
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       - name: Cancel Previous Runs
