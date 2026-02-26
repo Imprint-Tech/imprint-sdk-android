@@ -19,7 +19,7 @@ on:
 
 jobs:
   release:
-    runs-on: arc-runner-imprint
+    runs-on: ubuntu-latest
     environment:
       name: production
     steps:
