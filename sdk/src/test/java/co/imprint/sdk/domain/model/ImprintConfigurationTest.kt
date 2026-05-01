@@ -46,7 +46,7 @@ class ImprintConfigurationTest {
 
     assertTrue(config.webUrl.startsWith("https://apply.sbx.imprint.co/start?"))
     assertTrue(config.webUrl.contains("client_secret=sbx-secret"))
-    assertTrue(config.webUrl.contains("offerConfigUUID=sbx-offer-uuid"))
+    assertTrue(config.webUrl.contains("offerConfigUUIDs=sbx-offer-uuid"))
   }
 
   @Test
