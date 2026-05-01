@@ -68,6 +68,14 @@ jobs:
           set -o pipefail
           ./gradlew :sdk:testReleaseUnitTest | grep -v "sensitive"
 
+      - name: Print Test Failures
+        if: failure()
+        run: |
+          echo "::group::Test Failures"
+          find sdk/build/reports/tests -name "*.html" -exec echo "Report: {}" \;
+          find sdk/build/test-results -name "*.xml" -print0 | xargs -0 -I {} sh -c 'echo "--- {} ---" && grep -A 5 "failure\|error" "{}" || true'
+          echo "::endgroup::"
+
       # Run Android Lint
       - name: Run Android Lint
         run: |

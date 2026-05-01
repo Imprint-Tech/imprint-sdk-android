@@ -15,10 +15,15 @@ import kotlinx.parcelize.Parcelize
 data class ImprintConfiguration(
   val clientSecret: String,
   val environment: ImprintEnvironment = ImprintEnvironment.PRODUCTION,
+  val offerConfigUUID: String? = null,
   internal val customHostUrl: String? = null,
 ) : Parcelable {
 
   @IgnoredOnParcel
-  internal val webUrl: String =
-    "${customHostUrl ?: environment.hostUrl}/start?client_secret=${clientSecret}"
+  internal val webUrl: String = buildString {
+    append("${customHostUrl ?: environment.hostUrl}/start?client_secret=${clientSecret}")
+    if (offerConfigUUID != null) {
+      append("&offerConfigUUIDs=${offerConfigUUID}")
+    }
+  }
 }
