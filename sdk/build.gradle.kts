@@ -49,7 +49,7 @@ mavenPublishing {
     publishJavadocJar = true,
   ))
 
-  publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = false)
+  publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
   if (!isCi) {
     signAllPublications()
   }
