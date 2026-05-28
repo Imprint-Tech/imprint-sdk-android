@@ -2,7 +2,6 @@ package co.imprint.sdk.data.repository
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import co.imprint.sdk.di.IsolatedKoinComponent
 import co.imprint.sdk.domain.repository.ImageRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -11,7 +10,7 @@ import java.net.URL
 
 internal class ImageRepositoryImpl(
   private val ioDispatcher: CoroutineDispatcher
-) : ImageRepository, IsolatedKoinComponent {
+) : ImageRepository {
 
   override suspend fun getImageBitmap(url: String): Bitmap = withContext(ioDispatcher) {
     val connection = URL(url).openConnection() as HttpURLConnection

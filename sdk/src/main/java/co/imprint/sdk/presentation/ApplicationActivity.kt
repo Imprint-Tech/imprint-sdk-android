@@ -7,15 +7,25 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import co.imprint.sdk.presentation.theme.ImprintTheme
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import co.imprint.sdk.di.IsolatedKoinComponent
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import co.imprint.sdk.di.SdkServiceLocator
 import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
-internal class ApplicationActivity : ComponentActivity(), IsolatedKoinComponent {
+internal class ApplicationActivity : ComponentActivity() {
 
-  private val viewModel: ApplicationViewModel by viewModel()
+  private val viewModel: ApplicationViewModel by lazy {
+    val factory = viewModelFactory {
+      initializer {
+        SdkServiceLocator.createViewModel(createSavedStateHandle())
+      }
+    }
+    ViewModelProvider(this, factory)[ApplicationViewModel::class.java]
+  }
 
   companion object {
     const val APPLICATION_CONFIGURATION = "config"

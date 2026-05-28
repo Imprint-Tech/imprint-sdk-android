@@ -61,6 +61,4 @@ dependencies {
   implementation(libs.androidx.lifecycle.viewmodel.compose)
   implementation(libs.androidx.ui.tooling.preview)
   implementation(project("::sdk"))
-  //Koin
-  implementation(libs.koin.android)
 }
