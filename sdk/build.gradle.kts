@@ -102,9 +102,6 @@ dependencies {
   implementation(libs.androidx.lifecycle.runtime.compose)
   implementation(libs.androidx.activity.compose)
 
-  //Koin
-  implementation(libs.koin.android)
-
   // Optional: For testing Compose UI
   androidTestImplementation(libs.androidx.ui.test.junit4)
   debugImplementation(libs.androidx.ui.tooling)
@@ -113,5 +110,5 @@ dependencies {
   testImplementation(libs.kotlinx.coroutines.test)
   testImplementation(libs.androidx.core.testing)
   testImplementation(libs.mockk)
-  testImplementation (libs.koin.test.junit4)
+  testImplementation(libs.kotlin.test)
 }
