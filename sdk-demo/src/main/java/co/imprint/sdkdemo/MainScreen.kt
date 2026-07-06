@@ -73,7 +73,7 @@ fun InputField(label: String, value: String, onValueChange: (String) -> Unit, ma
       modifier = Modifier
         .fillMaxWidth()
         .height((maxLines * 24).dp)
-        .testTag("client_secret_input"),
+        .testTag(TestTags.CLIENT_SECRET_INPUT),
       maxLines = maxLines,
       keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text)
     )
@@ -91,7 +91,7 @@ fun EnvironmentTabs(selectedEnv: Environment, onEnvSelected: (Environment) -> Un
       Tab(
         selected = env == selectedEnv,
         onClick = { onEnvSelected(env) },
-        modifier = Modifier.testTag("tab_${env.name.lowercase()}"),
+        modifier = Modifier.testTag(TestTags.environmentTab(env)),
         text = { Text(env.displayName) }
       )
     }
@@ -104,7 +104,7 @@ fun StartButton(onClick: () -> Unit) {
     onClick = onClick,
     modifier = Modifier
       .fillMaxWidth()
-      .testTag("start_application_button")
+      .testTag(TestTags.START_APPLICATION_BUTTON)
   ) {
     Text("Start Application")
   }
@@ -118,7 +118,8 @@ fun CompletionStateBox(completionState: String) {
       .fillMaxWidth()
       .wrapContentHeight()
       .background(Color.LightGray)
-      .padding(8.dp),
+      .padding(8.dp)
+      .testTag(TestTags.COMPLETION_STATE),
     style = MaterialTheme.typography.bodyLarge
   )
 }
