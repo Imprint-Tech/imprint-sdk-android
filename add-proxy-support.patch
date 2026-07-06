@@ -1,0 +1,29 @@
+diff --git a/sdk-demo/src/main/AndroidManifest.xml b/sdk-demo/src/main/AndroidManifest.xml
+index 50114a8..cc6eddb 100644
+--- a/sdk-demo/src/main/AndroidManifest.xml
++++ b/sdk-demo/src/main/AndroidManifest.xml
+@@ -11,6 +11,7 @@
+         android:roundIcon="@mipmap/app_icon_round"
+         android:supportsRtl="true"
+         android:theme="@style/Theme.ImprintSDKDemo"
++        android:networkSecurityConfig="@xml/network_security_config"
+         android:usesCleartextTraffic="false">
+         <activity
+             android:name="co.imprint.sdkdemo.MainActivity"
+diff --git a/sdk-demo/src/main/res/xml/network_security_config.xml b/sdk-demo/src/main/res/xml/network_security_config.xml
+new file mode 100644
+index 0000000..1e816de
+--- /dev/null
++++ b/sdk-demo/src/main/res/xml/network_security_config.xml
+@@ -0,0 +1,11 @@
++<?xml version="1.0" encoding="utf-8"?>
++<network-security-config>
++    <domain-config cleartextTrafficPermitted="false">
++        <domain includeSubdomains="true">stg.imprintapi.co</domain>
++        <domain includeSubdomains="true">sbx.imprint.co</domain>
++        <trust-anchors>
++            <certificates src="user" />
++            <certificates src="system" />
++        </trust-anchors>
++    </domain-config>
++</network-security-config>
