@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -62,7 +63,10 @@ private fun LogoImage(bitmap: Bitmap?) {
 
 @Composable
 private fun CloseButton(onDismiss: () -> Unit) {
-  IconButton(onClick = onDismiss) {
+  IconButton(
+    onClick = onDismiss,
+    modifier = Modifier.testTag("sdk_close_button"),
+  ) {
     Icon(
       imageVector = Icons.Default.Close,
       contentDescription = "Close",
