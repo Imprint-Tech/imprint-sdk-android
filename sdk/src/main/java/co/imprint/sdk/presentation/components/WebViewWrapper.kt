@@ -67,6 +67,9 @@ internal fun WebViewWrapper(
               Log.e("WebViewWrapper", "onMessage: Error parsing data from Web view")
             }
           }
+
+          @JavascriptInterface
+          fun supportsEventTiers(): Boolean = true
         },
         Constants.CALLBACK_HANDLER_NAME,
       )
