@@ -60,12 +60,15 @@ internal fun WebViewWrapper(
         object {
           @JavascriptInterface
           fun onMessage(data: String) {
-            try {
-              val jsonObject = JSONObject(data)
-              viewModel.processEventData(jsonObject)
+            val jsonObject = try {
+              JSONObject(data)
             } catch (e: Exception) {
               Log.e("WebViewWrapper", "onMessage: Error parsing data from Web view")
+              return
             }
+            // JavaScript interface methods run on a WebView background thread;
+            // lifecycle state and partner callbacks belong on the main thread.
+            post { viewModel.processEventData(jsonObject) }
           }
 
           @JavascriptInterface

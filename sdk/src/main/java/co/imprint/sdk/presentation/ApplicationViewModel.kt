@@ -87,12 +87,14 @@ internal class ApplicationViewModel(
     val eventName = eventData.optString(Constants.EVENT_NAME)
     if (eventName.isEmpty()) return
 
-    if (!eventData.has(Constants.SOURCE)) {
-      handleLegacyPartnerEvent(eventName, eventData)
-      return
+    // Payloads without a source predate the visibility boundary and are partner events.
+    val source = if (eventData.has(Constants.SOURCE)) {
+      eventData.optString(Constants.SOURCE)
+    } else {
+      Constants.PARTNER_SOURCE
     }
 
-    when (eventData.optString(Constants.SOURCE)) {
+    when (source) {
       Constants.PARTNER_SOURCE -> handlePartnerEvent(eventName, eventData)
       Constants.INTERNAL_SOURCE -> handleInternalEvent(eventName, eventData)
     }
@@ -101,8 +103,17 @@ internal class ApplicationViewModel(
   private fun handlePartnerEvent(eventName: String, eventData: JSONObject) {
     val state = ImprintProcessState.fromString(eventName)
     val resultData = processResultData(eventData, state)
-    ImprintCallbackHolder.onApplicationEvent?.invoke(eventName, resultData)
+    notifyEvent(eventName, resultData)
     handleEventLifecycle(eventData, state, resultData)
+  }
+
+  private fun notifyEvent(eventName: String, resultData: Map<String, Any?>) {
+    // A failing partner observer must not drop the lifecycle update for this event.
+    runCatching {
+      ImprintCallbackHolder.onApplicationEvent?.invoke(eventName, resultData)
+    }.onFailure {
+      Log.e("Imprint", "onEvent callback failed for $eventName", it)
+    }
   }
 
   private fun handleInternalEvent(eventName: String, eventData: JSONObject) {
@@ -128,13 +139,6 @@ internal class ApplicationViewModel(
       EventTier.TERMINAL -> if (state == ImprintProcessState.CLOSED) onDismiss()
       null -> Unit
     }
-  }
-
-  private fun handleLegacyPartnerEvent(eventName: String, eventData: JSONObject) {
-    val state = ImprintProcessState.fromString(eventName)
-    val resultData = processResultData(eventData, state)
-    ImprintCallbackHolder.onApplicationEvent?.invoke(eventName, resultData)
-    updateLegacyOutcome(state, resultData)
   }
 
   private fun updateLegacyOutcome(

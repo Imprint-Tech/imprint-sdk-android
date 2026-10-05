@@ -1,6 +1,7 @@
 package co.imprint.sdk.presentation
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.SavedStateHandle
 import co.imprint.sdk.domain.ImprintCallbackHolder
@@ -11,7 +12,10 @@ import co.imprint.sdk.domain.model.ImprintProcessState
 import co.imprint.sdk.domain.repository.ImageRepository
 import co.imprint.sdk.rules.MainDispatcherRule
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -220,6 +224,39 @@ class ApplicationViewModelTest {
     viewModel.processEventData(JSONObject().put(Constants.EVENT_NAME, "CLOSED"))
 
     assertEquals(ImprintCompletionState.OFFER_ACCEPTED, completionState)
+  }
+
+  @Test
+  fun `throwing onEvent callback does not drop lifecycle update`() {
+    mockkStatic(Log::class)
+    every { Log.e(any(), any(), any()) } returns 0
+    var completionState: ImprintCompletionState? = null
+    ImprintCallbackHolder.onApplicationEvent = { _, _ -> error("partner failure") }
+    ImprintCallbackHolder.onApplicationCompletion = { state, _ -> completionState = state }
+
+    try {
+      viewModel.processEventData(tieredEvent("OFFER_ACCEPTED", "outcome"))
+      viewModel.processEventData(tieredEvent("CLOSED", "terminal"))
+    } finally {
+      unmockkStatic(Log::class)
+    }
+
+    assertEquals(ImprintCompletionState.OFFER_ACCEPTED, completionState)
+  }
+
+  @Test
+  fun `payload without source honors tier and reaches onEvent`() {
+    val receivedEvents = mutableListOf<String>()
+    var completionState: ImprintCompletionState? = null
+    ImprintCallbackHolder.onApplicationEvent = { eventName, _ -> receivedEvents.add(eventName) }
+    ImprintCallbackHolder.onApplicationCompletion = { state, _ -> completionState = state }
+
+    viewModel.processEventData(tieredEvent("OFFER_ACCEPTED", "outcome").apply { remove(Constants.SOURCE) })
+    viewModel.processEventData(tieredEvent("IN_PROGRESS", "intermediate").apply { remove(Constants.SOURCE) })
+    viewModel.processEventData(tieredEvent("CLOSED", "terminal").apply { remove(Constants.SOURCE) })
+
+    assertEquals(ImprintCompletionState.OFFER_ACCEPTED, completionState)
+    assertEquals(listOf("OFFER_ACCEPTED", "IN_PROGRESS", "CLOSED"), receivedEvents)
   }
 
   private fun tieredEvent(
