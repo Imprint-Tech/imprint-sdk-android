@@ -87,7 +87,6 @@ internal class ApplicationViewModel(
     val eventName = eventData.optString(Constants.EVENT_NAME)
     if (eventName.isEmpty()) return
 
-    // Payloads without a source predate the visibility boundary and are partner events.
     val source = if (eventData.has(Constants.SOURCE)) {
       eventData.optString(Constants.SOURCE)
     } else {
@@ -108,7 +107,6 @@ internal class ApplicationViewModel(
   }
 
   private fun notifyEvent(eventName: String, resultData: Map<String, Any?>) {
-    // A failing partner observer must not drop the lifecycle update for this event.
     runCatching {
       ImprintCallbackHolder.onApplicationEvent?.invoke(eventName, resultData)
     }.onFailure {

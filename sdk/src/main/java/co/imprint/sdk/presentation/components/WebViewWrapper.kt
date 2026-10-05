@@ -66,8 +66,7 @@ internal fun WebViewWrapper(
               Log.e("WebViewWrapper", "onMessage: Error parsing data from Web view")
               return
             }
-            // JavaScript interface methods run on a WebView background thread;
-            // lifecycle state and partner callbacks belong on the main thread.
+            // JavaScript interface methods run on a WebView background thread.
             post { viewModel.processEventData(jsonObject) }
           }
 
