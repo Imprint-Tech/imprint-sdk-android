@@ -59,6 +59,7 @@ internal class ApplicationViewModel(
     completionState = processState.toCompletionState()
     val onCompletion = ImprintCallbackHolder.onApplicationCompletion
     ImprintCallbackHolder.onApplicationCompletion = null
+    ImprintCallbackHolder.onApplicationEvent = null
     onCompletion?.invoke(completionState, completionData)
     finishActivity()
   }
@@ -75,25 +76,87 @@ internal class ApplicationViewModel(
   }
 
   fun processEventData(eventData: JSONObject?) {
-    eventData?.let {
-      val logoURL = eventData.optString(Constants.LOGO_URL)
+    if (eventData == null) return
 
-      if (logoURL.isNotEmpty()) {
-        updateLogoUrl(url = logoURL)
-      } else {
-        val eventName = eventData.optString(Constants.EVENT_NAME)
-        val state = ImprintProcessState.fromString(eventName)
-
-        val resultData = processResultData(it, state)
-
-        if (state == ImprintProcessState.CLOSED) {
-          onDismiss()
-        } else {
-          processState = state
-          completionData = resultData
-        }
-      }
+    val logoURL = eventData.optString(Constants.LOGO_URL)
+    if (logoURL.isNotEmpty()) {
+      updateLogoUrl(url = logoURL)
+      return
     }
+
+    val eventName = eventData.optString(Constants.EVENT_NAME)
+    if (eventName.isEmpty()) return
+
+    val source = if (eventData.has(Constants.SOURCE)) {
+      eventData.optString(Constants.SOURCE)
+    } else {
+      Constants.PARTNER_SOURCE
+    }
+
+    when (source) {
+      Constants.PARTNER_SOURCE -> handlePartnerEvent(eventName, eventData)
+      Constants.INTERNAL_SOURCE -> handleInternalEvent(eventName, eventData)
+    }
+  }
+
+  private fun handlePartnerEvent(eventName: String, eventData: JSONObject) {
+    val state = ImprintProcessState.fromString(eventName)
+    val resultData = processResultData(eventData, state)
+    notifyEvent(eventName, resultData)
+    handleEventLifecycle(eventData, state, resultData)
+  }
+
+  private fun notifyEvent(eventName: String, resultData: Map<String, Any?>) {
+    runCatching {
+      ImprintCallbackHolder.onApplicationEvent?.invoke(eventName, resultData)
+    }.onFailure {
+      Log.e("Imprint", "onEvent callback failed for $eventName", it)
+    }
+  }
+
+  private fun handleInternalEvent(eventName: String, eventData: JSONObject) {
+    val state = ImprintProcessState.fromString(eventName)
+    val resultData = processResultData(eventData, state)
+    handleEventLifecycle(eventData, state, resultData)
+  }
+
+  private fun handleEventLifecycle(
+    eventData: JSONObject,
+    state: ImprintProcessState?,
+    resultData: Map<String, Any?>,
+  ) {
+
+    if (!eventData.has(Constants.TIER)) {
+      updateLegacyOutcome(state, resultData)
+      return
+    }
+
+    when (EventTier.fromString(eventData.optString(Constants.TIER))) {
+      EventTier.INTERMEDIATE -> Unit
+      EventTier.OUTCOME -> updateOutcome(state, resultData)
+      EventTier.TERMINAL -> if (state == ImprintProcessState.CLOSED) onDismiss()
+      null -> Unit
+    }
+  }
+
+  private fun updateLegacyOutcome(
+    state: ImprintProcessState?,
+    resultData: Map<String, Any?>,
+  ) {
+    if (state == ImprintProcessState.CLOSED) {
+      onDismiss()
+      return
+    }
+    updateOutcome(state, resultData)
+  }
+
+  private fun updateOutcome(
+    state: ImprintProcessState?,
+    resultData: Map<String, Any?>,
+  ) {
+    if (state == null || state == ImprintProcessState.CLOSED) return
+    processState = state
+    completionData = resultData
   }
 
   @VisibleForTesting
@@ -111,6 +174,17 @@ internal class ApplicationViewModel(
     }
 
     return resultData
+  }
+}
+
+private enum class EventTier {
+  INTERMEDIATE,
+  OUTCOME,
+  TERMINAL;
+
+  companion object {
+    fun fromString(value: String?): EventTier? =
+      entries.firstOrNull { it.name.equals(value, ignoreCase = true) }
   }
 }
 

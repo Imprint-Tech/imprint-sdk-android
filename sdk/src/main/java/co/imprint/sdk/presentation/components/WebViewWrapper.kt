@@ -57,17 +57,7 @@ internal fun WebViewWrapper(
       clearHistory()
 
       addJavascriptInterface(
-        object {
-          @JavascriptInterface
-          fun onMessage(data: String) {
-            try {
-              val jsonObject = JSONObject(data)
-              viewModel.processEventData(jsonObject)
-            } catch (e: Exception) {
-              Log.e("WebViewWrapper", "onMessage: Error parsing data from Web view")
-            }
-          }
-        },
+        ImprintJavascriptBridge(viewModel) { action -> post(action) },
         Constants.CALLBACK_HANDLER_NAME,
       )
 
@@ -131,4 +121,24 @@ internal fun WebViewWrapper(
     factory = { webView },
     modifier = modifier.fillMaxSize(),
   )
+}
+
+internal class ImprintJavascriptBridge(
+  private val viewModel: ApplicationViewModel,
+  private val dispatchOnWebView: (() -> Unit) -> Unit,
+) {
+  @JavascriptInterface
+  fun onMessage(data: String) {
+    val jsonObject = try {
+      JSONObject(data)
+    } catch (e: Exception) {
+      Log.e("WebViewWrapper", "onMessage: Error parsing data from Web view")
+      return
+    }
+    // JavaScript interface methods run on a WebView background thread.
+    dispatchOnWebView { viewModel.processEventData(jsonObject) }
+  }
+
+  @JavascriptInterface
+  fun supportsEventTiers(): Boolean = true
 }

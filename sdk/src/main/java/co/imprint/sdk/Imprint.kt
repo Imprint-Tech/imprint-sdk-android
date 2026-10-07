@@ -30,11 +30,32 @@ object Imprint {
     context: Context,
     configuration: ImprintConfiguration,
     onCompletion: (ImprintCompletionState, Map<String, Any?>?) -> Unit,
+  ) = startApplicationSession(context, configuration, null, onCompletion)
+
+  /**
+   * Starts the application process and observes every partner-visible WebView event.
+   *
+   * [onEvent] receives the event name and its metadata without changing when [onCompletion]
+   * runs or which final state it reports.
+   */
+  fun startApplication(
+    context: Context,
+    configuration: ImprintConfiguration,
+    onEvent: (String, Map<String, Any?>?) -> Unit,
+    onCompletion: (ImprintCompletionState, Map<String, Any?>?) -> Unit,
+  ) = startApplicationSession(context, configuration, onEvent, onCompletion)
+
+  private fun startApplicationSession(
+    context: Context,
+    configuration: ImprintConfiguration,
+    onEvent: ((String, Map<String, Any?>?) -> Unit)?,
+    onCompletion: (ImprintCompletionState, Map<String, Any?>?) -> Unit,
   ) {
     if (ImprintCallbackHolder.onApplicationCompletion != null) {
       Log.w("Imprint", "startApplication called while a session is already active. Ignoring.")
       return
     }
+    ImprintCallbackHolder.onApplicationEvent = onEvent
     ImprintCallbackHolder.onApplicationCompletion = onCompletion
     val intent = Intent(context, ApplicationActivity::class.java).apply {
       putExtra(APPLICATION_CONFIGURATION, configuration)

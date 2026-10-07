@@ -75,6 +75,21 @@ fun startApplication(
 
 `onCompletion`: The completion handler of the flow
 
+To observe the complete partner event stream, including intermediate events such as account-link results, use the overload with `onEvent`:
+
+```Kotlin
+Imprint.startApplication(
+  context = context,
+  configuration = configuration,
+  onEvent = { eventName, metadata ->
+    Log.d("Application event", "$eventName: $metadata")
+  },
+  onCompletion = onCompletion,
+)
+```
+
+Every event includes its WebView lifecycle `tier` in `metadata`: `intermediate`, `outcome`, or `terminal`. `onEvent` does not change the final state delivered to `onCompletion`.
+
 
 ## Sample APP
 
