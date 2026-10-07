@@ -20,6 +20,7 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
   val clientSecret by viewModel.clientSecret.collectAsState()
   val selectedEnvironment by viewModel.selectedEnvironment.collectAsState()
   val completionState by viewModel.completionState.collectAsState()
+  val eventLog by viewModel.eventLog.collectAsState()
   val context = LocalContext.current
 
   Scaffold(
@@ -53,6 +54,9 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
       Spacer(modifier = Modifier.height(64.dp))
 
       CompletionStateBox(completionState)
+
+      Spacer(modifier = Modifier.height(16.dp))
+      Text("Partner events:\n$eventLog")
     }
   }
 }

@@ -19,6 +19,9 @@ class MainViewModel : ViewModel() {
   private val _completionState = MutableStateFlow("")
   val completionState: StateFlow<String> = _completionState
 
+  private val _eventLog = MutableStateFlow("")
+  val eventLog: StateFlow<String> = _eventLog
+
   fun updateClientSecret(value: String) {
     _clientSecret.value = value
   }
@@ -28,6 +31,8 @@ class MainViewModel : ViewModel() {
   }
 
   fun startApplication(context: Context) {
+    _completionState.value = ""
+    _eventLog.value = ""
     val configuration = when (_selectedEnvironment.value) {
       Environment.STAGING -> ImprintConfiguration(
         clientSecret = _clientSecret.value,
@@ -71,6 +76,13 @@ class MainViewModel : ViewModel() {
     Imprint.startApplication(
       context = context,
       configuration = configuration,
+      onEvent = { eventName, metadata ->
+        val tier = metadata?.get("tier") as? String ?: "legacy"
+        val entry = "$eventName [$tier]"
+        _eventLog.value = listOf(_eventLog.value, entry)
+          .filter { it.isNotEmpty() }
+          .joinToString("\n")
+      },
       onCompletion = onCompletion,
     )
   }
