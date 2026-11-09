@@ -29,10 +29,6 @@ data class ImprintConfiguration(
     resolvedOfferConfigUUIDs()?.let { append("&offerConfigUUIDs=$it") }
   }
 
-  /**
-   * Mirrors the web SDK: a non-empty [offerConfigUUIDs] list wins over [offerConfigUUID],
-   * and the values are sent as one comma-separated `offerConfigUUIDs` parameter.
-   */
   private fun resolvedOfferConfigUUIDs(): String? {
     val list = offerConfigUUIDs?.filter { it.isNotBlank() }
     if (!list.isNullOrEmpty()) return list.joinToString(",")
